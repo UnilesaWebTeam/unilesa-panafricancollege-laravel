@@ -1,0 +1,297 @@
+<!--
+  CONVERSION NOTES: index
+
+  MISSING COMPONENTS (imported in the React file but not pasted):
+  - <SiteHeader> — renders the top navigation, logo, and login/apply buttons. Placed before <main>. Receives onLogin and onApply props.
+  - <SiteFooter> — renders the site footer. Placed after <main>.
+  - <Alert> — renders an alert box. Placed in Important Information section.
+  - <Badge> — renders a small status badge. Placed in Status Check and Programmes.
+  - <Button> — renders a styled button.
+  - <Card> — renders a box container with optional elevated styling.
+  - <Field> — renders a form input with a label.
+  - <TextField> — renders a form textarea with a label.
+  - <SectionHeading> — renders a section title with eyebrow text and an optional action element.
+  - <Modal> — renders an overlay dialog. Placed at the bottom of the DOM.
+
+  MISSING PAGES / ROUTES (linked or navigated to):
+  - /verify — where it is referenced (Apply Now button, Login button).
+
+  SHARED PARTIALS NEEDED (navbar, footer, sidebar, modal, layout):
+  - SiteHeader — top of the page.
+  - SiteFooter — bottom of the page.
+
+  HOOKS / CONTEXT / STATE / STORES USED:
+  - useState (modal) — Replaced with vanilla JS toggling a 'hidden' class on a modal HTML element and updating its text content.
+  - useState (statusResult) — Replaced with vanilla JS removing a 'hidden' class from the result DOM node upon form submission.
+
+  API CALLS / DATA SOURCES:
+  - None (data is provided via local imported static variables which have been mocked in the JS file).
+
+  ASSETS NEEDED (images, icons, fonts, SVGs):
+  - Custom display font (font-display) — Assumed to be a sans-serif like 'Outfit' or 'Plus Jakarta Sans', added via Google Fonts.
+
+  THIRD-PARTY LIBRARIES:
+  - @tanstack/react-router (Link) — Replaced with standard HTML <a> tags pointing to standard paths.
+  - Tailwind CSS — Used via CDN to preserve the utility classes present in the original component.
+
+  ASSUMPTIONS I MADE:
+  - Because UI primitives like <Card>, <Button>, and <Field> were not provided, I expanded them into standard HTML markup with corresponding Tailwind classes so the page remains functional and visually intact. 
+  - I used Tailwind CSS via CDN and configured custom colors (primary, foreground, etc.) in the config script to match the provided classes.
+
+  TODO BEFORE THIS PAGE IS COMPLETE:
+  - Replace the placeholder comments for <SiteHeader> and <SiteFooter> with the actual shared HTML partials.
+  - Attach the `openModal` function to the respective buttons inside the actual SiteHeader component once integrated.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post-UTME Application Portal | Northbridge University</title>
+  <meta name="description" content="Apply for Northbridge University Post-UTME screening online, verify your JAMB details, pay, upload documents and monitor your admission status." />
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Post-UTME Application Portal | Northbridge University" />
+  <meta property="og:description" content="Apply for Post-UTME screening online, verify your information and monitor your admission status." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            primary: '#0ea5e9', // Sky 500 approximation
+            foreground: '#0f172a', // Slate 900
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body class="bg-slate-50 antialiased">
+
+  <div id="home" class="relative min-h-screen overflow-hidden text-foreground">
+    <!-- Background Decor -->
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10">
+      <div class="absolute -left-32 -top-24 h-[42rem] w-[42rem] rounded-full bg-primary/20 blur-[120px]"></div>
+      <div class="absolute right-[-8rem] top-40 h-[34rem] w-[34rem] rounded-full bg-sky-300/30 blur-[120px]"></div>
+      <div class="absolute bottom-[-6rem] left-1/3 h-[30rem] w-[30rem] rounded-full bg-teal-300/20 blur-[120px]"></div>
+    </div>
+
+    <!-- [PLACEHOLDER: <SiteHeader /> goes here] -->
+    <div id="site-header-root"></div>
+
+    <main>
+      <!-- Hero -->
+      <section class="relative mx-auto max-w-7xl px-5 pb-16 pt-14 lg:px-8">
+        <div class="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+          <div>
+            <span class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white/60 px-3 py-1 text-xs font-semibold text-primary">
+              <span class="h-1.5 w-1.5 rounded-full bg-primary"></span> Applications open · Nov 04, 2025
+            </span>
+            <h1 class="mt-5 text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+              Post-UTME
+              <br />
+              Application Portal
+            </h1>
+            <p class="mt-5 max-w-xl text-base leading-relaxed text-foreground/60 sm:text-lg">
+              Apply for Post-UTME screening online, verify your information, complete your
+              application and monitor your admission status.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a href="/verify" class="ui-button ui-button-primary">Apply Now</a>
+              <a href="#status" class="ui-button ui-button-glass">Check Application Status</a>
+              <a href="/verify" class="ui-button ui-button-ghost">Login</a>
+            </div>
+          </div>
+
+          <div id="status" class="scroll-mt-24">
+            <div class="ui-card elevated">
+              <form id="status-form">
+                <div class="flex items-center justify-between gap-3">
+                  <p class="font-display text-sm font-bold text-foreground/80">
+                    Check Application Status
+                  </p>
+                  <span class="ui-badge ui-badge-success">Verified</span>
+                </div>
+                
+                <div class="mt-5 ui-field">
+                  <label for="jamb-reg">JAMB Registration Number</label>
+                  <input type="text" id="jamb-reg" placeholder="e.g. 12345678901" required />
+                </div>
+                
+                <div class="mt-4 ui-field">
+                  <label for="dob">Date of Birth</label>
+                  <input type="text" id="dob" placeholder="DD / MM / YYYY" required />
+                </div>
+                
+                <button type="submit" class="mt-5 w-full ui-button ui-button-ink">
+                  Check Status
+                </button>
+
+                <!-- Hidden by default, toggled via JS -->
+                <div id="status-result" class="mt-6 rounded-2xl border border-white/50 bg-white/40 p-4 hidden">
+                  <p class="text-[11px] font-semibold uppercase tracking-[0.15em] text-foreground/40">
+                    Recent result
+                  </p>
+                  <div class="mt-2 flex flex-wrap items-center justify-between gap-2">
+                    <div class="min-w-0">
+                      <p id="result-decision" class="font-display text-sm font-bold"></p>
+                      <p id="result-details" class="text-xs text-foreground/50"></p>
+                    </div>
+                    <span id="result-badge" class="ui-badge ui-badge-success"></span>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Important Information -->
+      <section id="about" class="scroll-mt-24 relative mx-auto max-w-7xl px-5 pb-16 lg:px-8">
+        <div class="mb-6">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Key dates</p>
+          <h2 class="mt-1 text-2xl font-bold font-display">Important Information</h2>
+        </div>
+        
+        <div id="key-dates-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <!-- Static Sample (Will be overridden by JS) -->
+          <div class="ui-card">
+            <p class="text-xs font-semibold text-foreground/40">Sample Date</p>
+            <p class="mt-2 font-display text-xl font-bold">Nov 04</p>
+            <p class="mt-1 text-xs text-foreground/50">Starts</p>
+          </div>
+        </div>
+        
+        <div class="mt-4 ui-alert">
+          <span class="font-semibold">Note:</span> Ensure your JAMB details match your
+          admission form exactly. Applicants must present a valid ID at the screening venue.
+        </div>
+      </section>
+
+      <!-- Application Process -->
+      <section id="admission" class="scroll-mt-24 relative mx-auto max-w-7xl px-5 pb-16 lg:px-8">
+        <div class="mb-6">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary">How it works</p>
+          <h2 class="mt-1 text-2xl font-bold font-display">Application Process</h2>
+        </div>
+        
+        <div id="process-steps-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <!-- Static Sample (Will be overridden by JS) -->
+          <div class="ui-card">
+            <span class="grid h-9 w-9 place-items-center rounded-lg bg-primary/10 font-display text-sm font-bold text-primary">1</span>
+            <p class="mt-3 text-sm font-semibold">Sample Step</p>
+            <p class="mt-1 text-xs text-foreground/50">Description</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Programmes -->
+      <section id="programmes" class="scroll-mt-24 relative mx-auto max-w-7xl px-5 pb-16 lg:px-8">
+        <div class="mb-6 flex items-end justify-between gap-4">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Course of study</p>
+            <h2 class="mt-1 text-2xl font-bold font-display">Popular Programmes</h2>
+          </div>
+          <button id="view-all-programmes-btn" class="hidden text-sm font-semibold text-primary sm:block">
+            View all &rarr;
+          </button>
+        </div>
+        
+        <div id="programmes-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <!-- Static Sample (Will be overridden by JS) -->
+          <div class="ui-card">
+            <p class="font-display text-sm font-bold">Sample Programme</p>
+            <p class="mt-1 text-xs text-foreground/50">Faculty</p>
+            <p class="mt-1 text-xs text-foreground/40">Duration</p>
+            <span class="ui-badge ui-badge-brand mt-4">Cut-off 0</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact -->
+      <section id="contact" class="scroll-mt-24 relative mx-auto max-w-7xl px-5 pb-20 lg:px-8">
+        <div class="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+          <div class="ui-card elevated">
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              Get in touch
+            </p>
+            <h2 class="mt-1 text-2xl font-bold font-display">Contact</h2>
+            <div class="mt-5 space-y-4 text-sm">
+              <div>
+                <p class="text-xs font-semibold text-foreground/40">Address</p>
+                <p id="contact-address" class="mt-1 text-foreground/70"></p>
+              </div>
+              <div>
+                <p class="text-xs font-semibold text-foreground/40">Phone</p>
+                <p id="contact-phone" class="mt-1 text-foreground/70"></p>
+              </div>
+              <div>
+                <p class="text-xs font-semibold text-foreground/40">Email</p>
+                <p id="contact-email" class="mt-1 text-foreground/70"></p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="ui-card elevated">
+            <form id="contact-form">
+              <div class="grid gap-4 sm:grid-cols-2">
+                <div class="ui-field sm:col-span-2">
+                  <label for="contact-name">Full Name</label>
+                  <input type="text" id="contact-name" placeholder="Your name" required />
+                </div>
+                <div class="ui-field">
+                  <label for="contact-email-input">Email</label>
+                  <input type="email" id="contact-email-input" placeholder="you@email.com" required />
+                </div>
+                <div class="ui-field">
+                  <label for="contact-phone-input">Phone</label>
+                  <input type="text" id="contact-phone-input" placeholder="+234 ..." />
+                </div>
+                <div class="ui-field sm:col-span-2">
+                  <label for="contact-message">Message</label>
+                  <textarea id="contact-message" rows="3" placeholder="How can we help?" required></textarea>
+                </div>
+              </div>
+              <button type="submit" class="mt-5 w-full ui-button ui-button-primary">
+                Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- [PLACEHOLDER: <SiteFooter /> goes here] -->
+    <div id="site-footer-root"></div>
+
+    <!-- Modal Base (Hidden by default) -->
+    <div id="global-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-foreground/20 backdrop-blur-sm hidden opacity-0 transition-opacity duration-200" aria-modal="true" role="dialog">
+      <div class="relative w-full max-w-md scale-95 rounded-2xl bg-white p-6 shadow-2xl transition-transform duration-200">
+        <button id="modal-close-btn" class="absolute right-4 top-4 text-foreground/50 hover:text-foreground" aria-label="Close modal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+        <h3 id="modal-title" class="font-display text-lg font-bold text-foreground"></h3>
+        <p id="modal-body" class="mt-3 text-sm text-foreground/70 leading-relaxed"></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>

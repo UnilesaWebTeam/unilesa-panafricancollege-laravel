@@ -1,0 +1,197 @@
+<!--
+  CONVERSION NOTES: eligibility
+
+  MISSING COMPONENTS (imported in the React file but not pasted):
+  - <SiteHeader> — renders top navigation and actions. Placed at the top.
+  - <StepProgress> — renders the multi-step progress bar (current="eligibility"). Placed below header.
+  - <SiteFooter> — renders the site footer. Placed at the bottom.
+  - <Card> — layout container for content blocks.
+  - <Badge> — status pill for eligibility result.
+  - <SectionHeading> — title text with an eyebrow label.
+  - <Detail> — dictionary list items (dt/dd) for candidate details.
+  - <ScoreBar> — custom progress bar showing score out of max.
+  - <Button> — standard interactive buttons.
+
+  MISSING PAGES / ROUTES (linked or navigated to):
+  - /verify — linked via "Back to Verification" button.
+  - /payment — linked via "Proceed to Payment" button.
+
+  SHARED PARTIALS NEEDED (navbar, footer, sidebar, modal, layout):
+  - SiteHeader — top of the page.
+  - StepProgress — below header.
+  - SiteFooter — bottom of the page.
+
+  HOOKS / CONTEXT / STATE / STORES USED:
+  - useState (eligible) — Replaced with vanilla JS checking the mocked candidate data to toggle visibility of success/error UI states.
+
+  API CALLS / DATA SOURCES:
+  - None (data is provided via mockCandidate import, which has been recreated in the JS file).
+
+  ASSETS NEEDED (images, icons, fonts, SVGs):
+  - Custom fonts (Inter, Outfit) via Google Fonts.
+
+  THIRD-PARTY LIBRARIES:
+  - @tanstack/react-router (Link) — Replaced with standard HTML <a> tags.
+  - Tailwind CSS — Maintained via CDN. Added custom colors (success, destructive) to the config to match the React component's utility classes.
+
+  ASSUMPTIONS I MADE:
+  - I assumed the `success` and `destructive` color variables translate to standard green and red hex codes in the Tailwind config.
+  - Component layouts like `Detail` and `ScoreBar` were flattened into standard HTML strings rendered by JavaScript based on the mock data.
+
+  TODO BEFORE THIS PAGE IS COMPLETE:
+  - Replace the [PLACEHOLDER] comments with the actual HTML partials for SiteHeader, StepProgress, and SiteFooter.
+  - Replace the static `mockCandidate` object in the JS file with an actual API fetch or localStorage retrieval containing the real applicant's data.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eligibility Status | Northbridge University</title>
+  <meta name="description" content="Check your Post-UTME eligibility result — JAMB score, required minimum score and programme eligibility." />
+  
+  <meta property="og:title" content="Eligibility Status | Northbridge University" />
+  <meta property="og:description" content="Check your Post-UTME eligibility result and proceed to payment if eligible." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            primary: '#0ea5e9',
+            foreground: '#0f172a',
+            success: '#16a34a', // Green for eligible state
+            destructive: '#dc2626', // Red for ineligible state
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link rel="stylesheet" href="eligibility.css" />
+</head>
+<body class="bg-slate-50 antialiased">
+
+  <div class="relative min-h-screen overflow-hidden text-foreground">
+    <!-- Background Decor -->
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10">
+      <div class="absolute -left-32 -top-24 h-[42rem] w-[42rem] rounded-full bg-primary/20 blur-[120px]"></div>
+      <div class="absolute right-[-8rem] top-40 h-[34rem] w-[34rem] rounded-full bg-sky-300/30 blur-[120px]"></div>
+    </div>
+
+    <!-- [PLACEHOLDER: <SiteHeader /> goes here] -->
+    <div id="site-header-root"></div>
+
+    <!-- [PLACEHOLDER: <StepProgress current="eligibility" /> goes here] -->
+    <div id="step-progress-root"></div>
+
+    <main class="mx-auto max-w-7xl px-5 pb-20 pt-8 lg:px-8">
+      <!-- SectionHeading -->
+      <div class="mb-8">
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Step 2 of 7</p>
+        <h1 class="mt-1 text-3xl font-bold font-display">Eligibility</h1>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-[1fr_0.9fr]">
+        
+        <!-- Result card -->
+        <div class="ui-card elevated">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              Eligibility Status
+            </p>
+            <span id="eligibility-badge" class="ui-badge ui-badge-neutral">Checking...</span>
+          </div>
+
+          <!-- Eligible Alert (Hidden by default) -->
+          <div id="alert-eligible" class="mt-5 rounded-2xl border border-success/30 bg-success/10 p-5 hidden">
+            <p class="font-display text-lg font-bold text-success">
+              Congratulations! You are eligible to apply for Post-UTME screening.
+            </p>
+            <p class="mt-2 text-sm text-foreground/60">
+              Your JAMB score meets the minimum requirement for your chosen
+              programme. Proceed to payment to continue your application.
+            </p>
+          </div>
+
+          <!-- Not Eligible Alert (Hidden by default) -->
+          <div id="alert-ineligible" class="mt-5 rounded-2xl border border-destructive/30 bg-destructive/10 p-5 hidden">
+            <p class="font-display text-lg font-bold text-destructive">
+              You are not eligible for this programme.
+            </p>
+            <p class="mt-2 text-sm text-foreground/60">
+              Your JAMB score is below the required minimum. Consider another
+              programme or reapply next session.
+            </p>
+          </div>
+
+          <!-- Candidate Details -->
+          <dl id="candidate-details" class="mt-6 grid gap-x-6 gap-y-4 sm:grid-cols-2">
+            <!-- Static sample (will be overwritten by JS) -->
+            <div>
+              <dt class="text-xs font-semibold text-foreground/40">Candidate</dt>
+              <dd class="mt-1 text-sm font-medium text-foreground/80">Loading...</dd>
+            </div>
+          </dl>
+
+          <!-- Actions -->
+          <div class="mt-6 flex flex-wrap items-center justify-between gap-3">
+            <a href="/verify" class="ui-button ui-button-ghost">&larr; Back to Verification</a>
+            <a id="proceed-btn" href="/payment" class="ui-button ui-button-primary disabled">Proceed to Payment &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Summary side panel -->
+        <div class="space-y-6">
+          <div class="ui-card">
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              Score breakdown
+            </p>
+            <div id="score-breakdown-container" class="mt-4 space-y-4">
+              <!-- Static Sample (Will be overridden by JS) -->
+              <div class="text-sm">Loading scores...</div>
+            </div>
+          </div>
+
+          <div class="ui-card">
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              What happens next
+            </p>
+            <ol class="mt-4 space-y-3 text-sm text-foreground/60">
+              <li class="flex gap-3">
+                <span class="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary/10 text-xs font-bold text-primary">3</span>
+                Pay the screening fee securely online.
+              </li>
+              <li class="flex gap-3">
+                <span class="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary/10 text-xs font-bold text-primary">4</span>
+                Complete the application form with your details.
+              </li>
+              <li class="flex gap-3">
+                <span class="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary/10 text-xs font-bold text-primary">5</span>
+                Upload your passport, WAEC and JAMB slip.
+              </li>
+            </ol>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- [PLACEHOLDER: <SiteFooter /> goes here] -->
+    <div id="site-footer-root"></div>
+  </div>
+
+  <script src="eligibility.js"></script>
+</body>
+</html>

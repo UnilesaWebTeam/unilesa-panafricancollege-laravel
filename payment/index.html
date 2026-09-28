@@ -1,0 +1,362 @@
+<!--
+  CONVERSION NOTES: payment
+
+  MISSING COMPONENTS (imported in the React file but not pasted):
+  - <SiteHeader> — renders top navigation and actions. Placed at the top.
+  - <StepProgress> — renders the multi-step progress bar (current="payment"). Placed below header.
+  - <SiteFooter> — renders the site footer. Placed at the bottom.
+  - <Card> — layout container for content blocks.
+  - <Badge> — status pill for payment status.
+  - <SectionHeading> — title text with an eyebrow label.
+  - <Button> — standard interactive buttons.
+
+  MISSING PAGES / ROUTES (linked or navigated to):
+  - /eligibility — linked via "Back to Eligibility" button.
+  - Continue Application route — linked via "Continue Application" button, destination not explicitly specified in the source (assumed /application or next step).
+
+  SHARED PARTIALS NEEDED (navbar, footer, sidebar, modal, layout):
+  - SiteHeader — top of the page.
+  - StepProgress — below header.
+  - SiteFooter — bottom of the page.
+
+  HOOKS / CONTEXT / STATE / STORES USED:
+  - useState (status) — Replaced with vanilla JS variable 'currentStatus' and a UI render function that toggles 'hidden' classes on the respective banner and button elements.
+  - useState (reference) — Replaced with vanilla JS string variable, updated upon successful payment simulation.
+  - useState (demoFailed) — Replaced with vanilla JS boolean tied to a checkbox 'change' event.
+  - useState (showReceipt) — Replaced with vanilla JS toggling a 'hidden' class on the receipt modal DOM element.
+
+  API CALLS / DATA SOURCES:
+  - None (data provided via mockCandidate import, recreated in JS).
+  - Simulated payment timeout replacing an actual payment gateway call.
+
+  ASSETS NEEDED (images, icons, fonts, SVGs):
+  - Custom fonts (Inter, Outfit) via Google Fonts.
+
+  THIRD-PARTY LIBRARIES:
+  - @tanstack/react-router (Link) — Replaced with standard HTML <a> tags.
+  - Tailwind CSS — Maintained via CDN. Added custom colors (warning, success, destructive) to the config to match React utility classes.
+
+  ASSUMPTIONS I MADE:
+  - I assumed the `warning` colors (`warning-border`, `warning-surface`, `warning-foreground`) map to standard amber/yellow hex codes in the Tailwind config.
+  - The "Continue Application" button href is set to "#" since the exact next route was missing.
+
+  TODO BEFORE THIS PAGE IS COMPLETE:
+  - Replace [PLACEHOLDER] comments with the actual HTML partials for SiteHeader, StepProgress, and SiteFooter.
+  - Replace the simulated `setTimeout` payment function with your actual payment gateway integration (e.g., Paystack, Flutterwave).
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment | Northbridge University</title>
+  <meta name="description" content="Pay the Post-UTME application fee securely online and view your payment receipt." />
+  
+  <meta property="og:title" content="Payment | Northbridge University" />
+  <meta property="og:description" content="Pay the Post-UTME application fee securely online and view your payment receipt." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            primary: '#0ea5e9',
+            foreground: '#0f172a',
+            success: '#16a34a',
+            destructive: '#dc2626',
+            warning: {
+              border: 'rgba(245, 158, 11, 0.4)',
+              surface: 'rgba(254, 243, 199, 1)',
+              foreground: '#b45309'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link rel="stylesheet" href="payment.css" />
+</head>
+<body class="bg-slate-50 antialiased">
+
+  <div class="relative min-h-screen overflow-hidden text-foreground">
+    <!-- Background Decor -->
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10">
+      <div class="absolute -left-32 -top-24 h-[42rem] w-[42rem] rounded-full bg-primary/20 blur-[120px]"></div>
+      <div class="absolute right-[-8rem] top-40 h-[34rem] w-[34rem] rounded-full bg-sky-300/30 blur-[120px]"></div>
+    </div>
+
+    <!-- [PLACEHOLDER: <SiteHeader /> goes here] -->
+    <div id="site-header-root"></div>
+
+    <!-- [PLACEHOLDER: <StepProgress current="payment" /> goes here] -->
+    <div id="step-progress-root"></div>
+
+    <main class="mx-auto max-w-7xl px-5 pb-20 pt-8 lg:px-8">
+      <!-- SectionHeading -->
+      <div class="mb-8">
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Step 3 of 7</p>
+        <h1 class="mt-1 text-3xl font-bold font-display">Payment</h1>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-[1fr_0.9fr]">
+        
+        <!-- Payment card -->
+        <div class="ui-card elevated">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              Application Fee
+            </p>
+            <div id="status-badge-container">
+              <!-- Replaced via JS -->
+              <span class="ui-badge ui-badge-neutral">Unpaid</span>
+            </div>
+          </div>
+
+          <!-- Payment Details -->
+          <dl class="mt-6 grid gap-x-6 gap-y-4 sm:grid-cols-2">
+            <div>
+              <dt class="text-xs font-semibold text-foreground/40">Candidate</dt>
+              <dd id="detail-candidate" class="mt-1 text-sm font-medium text-foreground/80">Loading...</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-semibold text-foreground/40">JAMB Reg</dt>
+              <dd id="detail-jamb-reg" class="mt-1 text-sm font-medium text-foreground/80">Loading...</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-semibold text-foreground/40">Programme</dt>
+              <dd id="detail-programme" class="mt-1 text-sm font-medium text-foreground/80">Loading...</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-semibold text-foreground/40">Application Fee</dt>
+              <dd id="detail-fee" class="mt-1 text-sm font-medium text-foreground/80">Loading...</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-semibold text-foreground/40">Payment Reference</dt>
+              <dd id="detail-reference" class="mt-1 text-sm font-medium text-foreground/80">Loading...</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-semibold text-foreground/40">Payment Status</dt>
+              <dd id="detail-status" class="mt-1 text-sm font-medium text-foreground/80">Loading...</dd>
+            </div>
+          </dl>
+
+          <!-- State banners -->
+          <div class="mt-6 relative">
+            
+            <!-- Unpaid Banner -->
+            <div id="banner-unpaid" class="rounded-2xl border border-warning-border bg-warning-surface/60 p-5">
+              <p class="font-display text-lg font-bold text-warning-foreground">
+                Payment required
+              </p>
+              <p class="mt-2 text-sm text-foreground/60">
+                Pay the <span class="fee-display"></span> application fee to continue your
+                Post-UTME application. Payment is secured online.
+              </p>
+            </div>
+
+            <!-- Processing Banner -->
+            <div id="banner-processing" class="hidden rounded-2xl border border-primary/30 bg-primary/10 p-5">
+              <p class="font-display text-lg font-bold text-primary">
+                Processing payment…
+              </p>
+              <p class="mt-2 text-sm text-foreground/60">
+                Please wait while we confirm your transaction. Do not close
+                this window.
+              </p>
+              <div class="mt-4 h-1.5 overflow-hidden rounded-full bg-primary/20">
+                <div class="h-full w-1/2 animate-pulse rounded-full bg-primary"></div>
+              </div>
+            </div>
+
+            <!-- Successful Banner -->
+            <div id="banner-successful" class="hidden rounded-2xl border border-success/30 bg-success/10 p-5">
+              <p class="font-display text-lg font-bold text-success">
+                Payment Successful
+              </p>
+              <p class="mt-2 text-sm text-foreground/60">
+                Your application fee of <span class="fee-display"></span> has been received.
+                Reference: <span id="success-reference-display" class="font-semibold"></span>.
+              </p>
+            </div>
+
+            <!-- Failed Banner -->
+            <div id="banner-failed" class="hidden rounded-2xl border border-destructive/30 bg-destructive/10 p-5">
+              <p class="font-display text-lg font-bold text-destructive">
+                Payment Failed
+              </p>
+              <p class="mt-2 text-sm text-foreground/60">
+                The transaction could not be completed. No amount was
+                deducted. Please try again.
+              </p>
+            </div>
+
+          </div>
+
+          <!-- Actions -->
+          <div class="mt-6 flex flex-wrap items-center justify-between gap-3">
+            <a href="/eligibility" class="ui-button ui-button-ghost">&larr; Back to Eligibility</a>
+
+            <div class="flex flex-wrap items-center gap-3">
+              <label class="flex items-center gap-2 text-xs font-semibold text-foreground/50 cursor-pointer">
+                <input
+                  type="checkbox"
+                  id="demo-failed-checkbox"
+                  class="h-4 w-4 rounded border-foreground/20 cursor-pointer"
+                />
+                Demo failed payment
+              </label>
+
+              <!-- Default Action Group -->
+              <div id="action-group-pay" class="flex gap-2">
+                <button id="pay-btn" class="ui-button ui-button-primary">
+                  Pay Application Fee
+                </button>
+              </div>
+
+              <!-- Success Action Group -->
+              <div id="action-group-success" class="hidden flex gap-2">
+                <button id="view-receipt-btn" class="ui-button ui-button-glass">
+                  View Receipt
+                </button>
+                <a href="#" class="ui-button ui-button-primary">Continue Application &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+          <p class="mt-3 text-center text-[11px] text-foreground/40">
+            This is a UI prototype — no real payment is processed.
+          </p>
+        </div>
+
+        <!-- Side panel -->
+        <div class="space-y-6">
+          <div class="ui-card">
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              Fee summary
+            </p>
+            <div class="mt-4 space-y-3 text-sm">
+              <div class="flex items-center justify-between text-foreground/60">
+                <span>Application fee</span>
+                <span class="font-medium text-foreground/80 fee-display"></span>
+              </div>
+              <div class="flex items-center justify-between text-foreground/60">
+                <span>Processing</span>
+                <span class="font-medium text-foreground/80">₦0</span>
+              </div>
+              <div class="h-px bg-foreground/10"></div>
+              <div class="flex items-center justify-between font-semibold">
+                <span>Total</span>
+                <span class="text-primary fee-display"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ui-card">
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              What happens next
+            </p>
+            <ol class="mt-4 space-y-3 text-sm text-foreground/60">
+              <li class="flex gap-3">
+                <span class="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary/10 text-xs font-bold text-primary">4</span>
+                Complete the application form with your details.
+              </li>
+              <li class="flex gap-3">
+                <span class="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary/10 text-xs font-bold text-primary">5</span>
+                Upload your passport, WAEC and JAMB slip.
+              </li>
+              <li class="flex gap-3">
+                <span class="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary/10 text-xs font-bold text-primary">6</span>
+                Review and submit your application.
+              </li>
+            </ol>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- [PLACEHOLDER: <SiteFooter /> goes here] -->
+    <div id="site-footer-root"></div>
+
+    <!-- Receipt Modal (Hidden by default) -->
+    <div id="receipt-modal" class="fixed inset-0 z-50 hidden place-items-center bg-foreground/40 p-4 backdrop-blur-sm" aria-modal="true" role="dialog">
+      <div class="ui-glass edge w-full max-w-lg rounded-3xl p-6 relative">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              Payment Receipt
+            </p>
+            <h3 id="receipt-institution" class="mt-1 text-lg font-bold tracking-tight"></h3>
+          </div>
+          <button id="close-receipt-btn" aria-label="Close" class="shrink-0 rounded-lg px-2 text-foreground/50 transition hover:text-primary">
+            ✕
+          </button>
+        </div>
+
+        <div class="mt-5 rounded-2xl border border-white/50 bg-white/40 p-5">
+          <dl class="grid gap-x-6 gap-y-4 sm:grid-cols-2">
+            <div>
+              <dt class="text-xs font-semibold text-foreground/40">Candidate</dt>
+              <dd id="receipt-candidate" class="mt-1 text-sm font-medium text-foreground/80"></dd>
+            </div>
+            <div>
+              <dt class="text-xs font-semibold text-foreground/40">JAMB Reg</dt>
+              <dd id="receipt-jamb" class="mt-1 text-sm font-medium text-foreground/80"></dd>
+            </div>
+            <div>
+              <dt class="text-xs font-semibold text-foreground/40">Programme</dt>
+              <dd id="receipt-programme" class="mt-1 text-sm font-medium text-foreground/80"></dd>
+            </div>
+            <div>
+              <dt class="text-xs font-semibold text-foreground/40">Payment Type</dt>
+              <dd class="mt-1 text-sm font-medium text-foreground/80">Post-UTME Application Fee</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-semibold text-foreground/40">Amount</dt>
+              <dd class="mt-1 text-sm font-medium text-foreground/80 fee-display"></dd>
+            </div>
+            <div>
+              <dt class="text-xs font-semibold text-foreground/40">Transaction Ref</dt>
+              <dd id="receipt-ref" class="mt-1 text-sm font-medium text-foreground/80"></dd>
+            </div>
+            <div>
+              <dt class="text-xs font-semibold text-foreground/40">Date</dt>
+              <dd id="receipt-date" class="mt-1 text-sm font-medium text-foreground/80"></dd>
+            </div>
+            <div>
+              <dt class="text-xs font-semibold text-foreground/40">Status</dt>
+              <dd class="mt-1 text-sm font-medium text-foreground/80">Successful</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="mt-5 flex flex-wrap gap-3">
+          <button id="print-receipt-btn" class="ui-button ui-button-glass flex-1">
+            Print Receipt
+          </button>
+          <button id="download-receipt-btn" class="ui-button ui-button-primary flex-1">
+            Download Receipt
+          </button>
+        </div>
+        <p class="mt-3 text-center text-[11px] text-foreground/40">
+          This is a UI prototype — receipt is mock/demo data.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="payment.js"></script>
+</body>
+</html>

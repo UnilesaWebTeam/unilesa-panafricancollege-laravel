@@ -1,0 +1,259 @@
+<!--
+  CONVERSION NOTES: review
+
+  MISSING COMPONENTS (imported in the React file but not pasted):
+  - <DashboardShell> — renders the main application layout (sidebar, topbar). Wraps the entire page content. Passes `active="My Application"`.
+  - <Card> — layout container for content blocks.
+  - <Badge> — status pill component.
+  - <Button> — standard interactive buttons.
+
+  MISSING PAGES / ROUTES (linked or navigated to):
+  - /application — linked via "Edit" button in Personal, Academic, and Next of Kin sections.
+  - /documents — linked via "Edit" button in Documents section.
+  - /payment — linked via "Edit" button in Payment section.
+
+  SHARED PARTIALS NEEDED (navbar, footer, sidebar, modal, layout):
+  - DashboardShell — wraps the entire page content. Provides standard dashboard navigation.
+
+  HOOKS / CONTEXT / STATE / STORES USED:
+  - useState (confirmed) — Replaced with vanilla JS boolean tied to a checkbox change event.
+  - useState (showConfirm) — Replaced with vanilla JS toggling a 'hidden' class on the confirmation modal.
+  - useState (submitted) — Replaced with vanilla JS boolean triggering a UI update function to show success banners and disable inputs.
+  - useState (checkboxError) — Replaced with vanilla JS boolean toggling a 'hidden' class on the error text element.
+
+  API CALLS / DATA SOURCES:
+  - None (data provided via local imported static variables which have been mocked in the JS file).
+
+  ASSETS NEEDED (images, icons, fonts, SVGs):
+  - Custom fonts (Inter, Outfit) via Google Fonts.
+
+  THIRD-PARTY LIBRARIES:
+  - @tanstack/react-router (Link) — Replaced with standard HTML <a> tags.
+  - Tailwind CSS — Maintained via CDN. Added custom colors to the config.
+
+  ASSUMPTIONS I MADE:
+  - Assumed the `DashboardShell` layout can be represented by a placeholder wrapping the main content.
+  - Mapped the custom `<Section>` and `<Row>` React components directly into standard HTML structures mirroring their returned JSX.
+  - Assuming `requiredDocuments.length` is 6 based on the 6 items in `reviewDocuments`.
+
+  TODO BEFORE THIS PAGE IS COMPLETE:
+  - Replace the [PLACEHOLDER] comments with the actual HTML structure of your `DashboardShell` (sidebar, nav, etc.).
+  - Connect the final "Yes, Submit" button to your actual backend API endpoint.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Review Application | Northbridge University</title>
+  <meta name="description" content="Review your personal information, academic details, next of kin, documents and payment before submitting your Post-UTME application." />
+  
+  <meta property="og:title" content="Review Application | Northbridge University" />
+  <meta property="og:description" content="Review your personal information, academic details, next of kin, documents and payment before submitting your Post-UTME application." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            primary: '#0ea5e9',
+            foreground: '#0f172a',
+            success: '#16a34a',
+            destructive: '#dc2626',
+            brand: '#0ea5e9',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link rel="stylesheet" href="review.css" />
+</head>
+<body class="bg-slate-50 antialiased text-foreground">
+
+  <!-- [PLACEHOLDER: <DashboardShell active="My Application"> starts here] -->
+  <div id="dashboard-shell-placeholder" class="min-h-screen">
+    
+    <main class="mx-auto max-w-4xl px-5 py-8 lg:px-8">
+      <div class="space-y-6">
+        
+        <!-- Header Card -->
+        <div class="ui-card elevated">
+          <div class="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Review</p>
+              <h1 class="mt-1 text-2xl font-bold tracking-tight sm:text-3xl font-display">Application Review</h1>
+              <p class="mt-1 text-sm text-foreground/60">
+                Confirm that all information provided is correct before submitting.
+              </p>
+            </div>
+            <span id="header-badge" class="ui-badge ui-badge-brand">Awaiting submission</span>
+          </div>
+        </div>
+
+        <!-- Success Banner (Hidden by default) -->
+        <div id="success-banner" class="hidden frost rounded-2xl border border-success/30 bg-success/10 p-4 text-sm font-semibold text-success">
+          Application submitted successfully (demo). Reference APP-2026-004512. You can print your screening slip from
+          the dashboard.
+        </div>
+
+        <!-- Personal Information Section -->
+        <div class="ui-card">
+          <div class="mb-4 flex items-center justify-between gap-3">
+            <h2 class="text-lg font-bold tracking-tight font-display">Personal Information</h2>
+            <a href="/application" class="inline-flex items-center rounded-xl border border-white/50 bg-white/50 px-4 py-2 text-xs font-semibold text-foreground/70 transition hover:bg-white/70 hover:text-primary">
+              Edit
+            </a>
+          </div>
+          <div id="personal-info-grid" class="grid gap-3 sm:grid-cols-2">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Academic Information Section -->
+        <div class="ui-card">
+          <div class="mb-4 flex items-center justify-between gap-3">
+            <h2 class="text-lg font-bold tracking-tight font-display">Academic Information</h2>
+            <a href="/application" class="inline-flex items-center rounded-xl border border-white/50 bg-white/50 px-4 py-2 text-xs font-semibold text-foreground/70 transition hover:bg-white/70 hover:text-primary">
+              Edit
+            </a>
+          </div>
+          <div id="academic-info-grid" class="grid gap-3 sm:grid-cols-2">
+            <!-- Populated by JS -->
+          </div>
+          
+          <p class="mb-2 mt-4 text-xs font-semibold uppercase tracking-[0.15em] text-foreground/40">
+            O'Level Result
+          </p>
+          <div class="overflow-hidden rounded-xl border border-white/60">
+            <table class="w-full text-sm">
+              <thead class="bg-white/60 text-left text-xs font-semibold text-foreground/50">
+                <tr>
+                  <th class="px-4 py-2">Subject</th>
+                  <th class="px-4 py-2">Grade</th>
+                </tr>
+              </thead>
+              <tbody id="olevel-tbody">
+                <!-- Static Sample (Will be overridden by JS) -->
+                <tr class="border-t border-white/60 bg-white/40">
+                  <td class="px-4 py-2">Mathematics</td>
+                  <td class="px-4 py-2 font-semibold text-primary">A1</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Next of Kin Section -->
+        <div class="ui-card">
+          <div class="mb-4 flex items-center justify-between gap-3">
+            <h2 class="text-lg font-bold tracking-tight font-display">Next of Kin</h2>
+            <a href="/application" class="inline-flex items-center rounded-xl border border-white/50 bg-white/50 px-4 py-2 text-xs font-semibold text-foreground/70 transition hover:bg-white/70 hover:text-primary">
+              Edit
+            </a>
+          </div>
+          <div id="nok-info-grid" class="grid gap-3 sm:grid-cols-2">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Documents Section -->
+        <div class="ui-card">
+          <div class="mb-4 flex items-center justify-between gap-3">
+            <h2 id="documents-title" class="text-lg font-bold tracking-tight font-display">Documents</h2>
+            <a href="/documents" class="inline-flex items-center rounded-xl border border-white/50 bg-white/50 px-4 py-2 text-xs font-semibold text-foreground/70 transition hover:bg-white/70 hover:text-primary">
+              Edit
+            </a>
+          </div>
+          <ul id="documents-list" class="space-y-2">
+            <!-- Static Sample (Will be overridden by JS) -->
+            <li class="flex items-center justify-between gap-3 rounded-xl border border-white/60 bg-white/50 px-4 py-3">
+              <div class="min-w-0">
+                <p class="truncate text-sm font-semibold">Sample Document</p>
+                <p class="truncate text-xs text-foreground/50">sample.pdf</p>
+              </div>
+              <span class="ui-badge ui-badge-success">Uploaded</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Payment Section -->
+        <div class="ui-card">
+          <div class="mb-4 flex items-center justify-between gap-3">
+            <h2 class="text-lg font-bold tracking-tight font-display">Payment</h2>
+            <a href="/payment" class="inline-flex items-center rounded-xl border border-white/50 bg-white/50 px-4 py-2 text-xs font-semibold text-foreground/70 transition hover:bg-white/70 hover:text-primary">
+              Edit
+            </a>
+          </div>
+          <div id="payment-info-grid" class="grid gap-3 sm:grid-cols-2">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Submission Card -->
+        <div class="ui-card elevated">
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              id="confirm-checkbox"
+              class="mt-1 h-4 w-4 accent-primary rounded border-foreground/20 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+            <span class="text-sm text-foreground/70">
+              I confirm that the information provided is accurate.
+            </span>
+          </label>
+          
+          <!-- Checkbox Error (Hidden by default) -->
+          <p id="checkbox-error" class="hidden mt-2 text-xs font-semibold text-destructive">
+            Please confirm that your information is accurate before submitting.
+          </p>
+          
+          <div class="mt-5 flex flex-wrap items-center gap-3">
+            <button id="submit-btn" class="ui-button ui-button-primary">
+              Submit Application
+            </button>
+            <span class="text-xs text-foreground/50">Prototype only — nothing is stored.</span>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+  <!-- [PLACEHOLDER: </DashboardShell> ends here] -->
+
+  <!-- Confirm Modal (Hidden by default) -->
+  <div id="confirm-modal" class="hidden fixed inset-0 z-50 place-items-center bg-foreground/40 p-4 backdrop-blur-sm" aria-modal="true" role="dialog">
+    <div class="ui-glass edge w-full max-w-md rounded-3xl p-6">
+      <h3 class="text-lg font-bold tracking-tight font-display">Submit application?</h3>
+      <p class="mt-3 text-sm text-foreground/70">
+        You are about to submit your Post-UTME application for <span id="modal-programme-name" class="font-semibold"></span>. Once submitted, you will no
+        longer be able to edit your details.
+      </p>
+      <div class="mt-5 grid gap-2 sm:grid-cols-2">
+        <button id="modal-cancel-btn" class="ui-button ui-button-glass">
+          Go Back
+        </button>
+        <button id="modal-confirm-btn" class="ui-button ui-button-primary">
+          Yes, Submit
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="review.js"></script>
+</body>
+</html>
