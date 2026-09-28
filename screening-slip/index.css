@@ -1,0 +1,69 @@
+/* screening-slip.css */
+
+/* Primitive UI Styles mapping */
+.ui-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition-property: all;
+  transition-duration: 200ms;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.ui-button-primary {
+  background-color: var(--color-primary, #0ea5e9);
+  color: #ffffff;
+  border: 1px solid transparent;
+}
+.ui-button-primary:hover:not(:disabled) {
+  background-color: #0284c7;
+}
+
+.ui-button-ink {
+  background-color: var(--color-foreground, #0f172a);
+  color: #ffffff;
+  border: 1px solid transparent;
+}
+.ui-button-ink:hover:not(:disabled) {
+  background-color: #1e293b;
+}
+
+.ui-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.ui-badge-success {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+/* Custom visual styling */
+.frost {
+  backdrop-filter: blur(8px);
+}
+
+/* Print Overrides */
+/* Note: Tailwind's 'print:hidden' utility is already included via CDN, 
+   but we add a fallback just in case to ensure UI buttons and banners hide when printing. */
+@media print {
+  body {
+    background-color: #ffffff !important;
+  }
+  #dashboard-shell-placeholder {
+    padding: 0 !important;
+  }
+  #screening-slip-card {
+    box-shadow: none !important;
+    border-color: #000000 !important;
+  }
+}

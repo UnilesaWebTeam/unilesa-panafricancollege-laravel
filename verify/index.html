@@ -1,0 +1,276 @@
+<!--
+  CONVERSION NOTES: verify
+
+  MISSING COMPONENTS (imported in the React file but not pasted):
+  - <SiteHeader> — renders top navigation and actions. Placed at the top.
+  - <StepProgress> — renders the multi-step progress bar (current="verification"). Placed below header.
+  - <SiteFooter> — renders the site footer. Placed at the bottom.
+  - <Card> — layout container for content blocks.
+  - <Badge> — status pill component.
+  - <SectionHeading> — title text with an eyebrow label.
+  - <Field> — custom form input component.
+  - <Button> — standard interactive buttons.
+
+  MISSING PAGES / ROUTES (linked or navigated to):
+  - /eligibility — linked via "Continue to Eligibility" button in the verified state.
+
+  SHARED PARTIALS NEEDED (navbar, footer, sidebar, modal, layout):
+  - SiteHeader — top of the page.
+  - StepProgress — below header.
+  - SiteFooter — bottom of the page.
+
+  HOOKS / CONTEXT / STATE / STORES USED:
+  - useState (jambReg) — Replaced with vanilla JS value tracking on the input field and a regex filter on 'input' event to strip non-digits.
+  - useState (examYear) — Replaced with vanilla JS value read directly from the `<select>`.
+  - useState (loading) — Replaced with vanilla JS toggling of UI visibility classes ('hidden') and disabling the submit button.
+  - useState (verified) — Replaced with vanilla JS DOM manipulation that populates the result template and swaps visibility from empty/loading to the verified view.
+  - useState (error) — Replaced with vanilla JS toggling an error message element.
+
+  API CALLS / DATA SOURCES:
+  - None (data provided via mockCandidate and examinationYears imports, which are recreated in the JS file).
+  - Verification API call is simulated with a 900ms `setTimeout`.
+
+  ASSETS NEEDED (images, icons, fonts, SVGs):
+  - Custom fonts (Inter, Outfit) via Google Fonts.
+  - Candidate Photo — Generic placeholder image URL used for the mock candidate photo.
+
+  THIRD-PARTY LIBRARIES:
+  - @tanstack/react-router (Link) — Replaced with standard HTML <a> tags.
+  - Tailwind CSS — Maintained via CDN. Added custom colors to the config.
+
+  ASSUMPTIONS I MADE:
+  - Added `shadow-[var(--shadow-edge-sm)]` approximation using Tailwind's standard `shadow-sm` and a border since the custom CSS variable was not provided.
+  - `examinationYears` is assumed to be an array of recent years (e.g., ["2024", "2023", "2022"]).
+
+  TODO BEFORE THIS PAGE IS COMPLETE:
+  - Replace the [PLACEHOLDER] comments with the actual HTML structure of your `SiteHeader`, `StepProgress`, and `SiteFooter`.
+  - Swap the simulated `setTimeout` in the `handleVerify` function with a real `fetch` request to your backend API to validate the JAMB registration number.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Candidate Verification | Northbridge University</title>
+  <meta name="description" content="Verify your JAMB registration details to begin the Northbridge University Post-UTME application." />
+  
+  <meta property="og:title" content="Candidate Verification | Northbridge University" />
+  <meta property="og:description" content="Verify your JAMB registration details to begin the Post-UTME application." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            primary: '#0ea5e9',
+            foreground: '#0f172a',
+            success: '#16a34a',
+            destructive: '#dc2626',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link rel="stylesheet" href="verify.css" />
+</head>
+<body class="bg-slate-50 antialiased text-foreground">
+
+  <div class="relative min-h-screen overflow-hidden text-foreground">
+    <!-- Background Decor -->
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10">
+      <div class="absolute -left-32 -top-24 h-[42rem] w-[42rem] rounded-full bg-primary/20 blur-[120px]"></div>
+      <div class="absolute right-[-8rem] top-40 h-[34rem] w-[34rem] rounded-full bg-sky-300/30 blur-[120px]"></div>
+    </div>
+
+    <!-- [PLACEHOLDER: <SiteHeader /> goes here] -->
+    <div id="site-header-root"></div>
+
+    <!-- [PLACEHOLDER: <StepProgress current="verification" /> goes here] -->
+    <div id="step-progress-root"></div>
+
+    <main class="mx-auto max-w-7xl px-5 pb-20 pt-8 lg:px-8">
+      
+      <!-- SectionHeading -->
+      <div class="mb-8">
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Step 1 of 7</p>
+        <h1 class="mt-1 text-3xl font-bold font-display">Candidate Verification</h1>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+        
+        <!-- Verification form -->
+        <div class="ui-card elevated self-start">
+          <form id="verify-form">
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              JAMB verification
+            </p>
+            <p class="mt-2 text-sm text-foreground/60">
+              Enter your JAMB registration number to verify your candidate
+              record before starting the Post-UTME application.
+            </p>
+
+            <div class="ui-field mt-5">
+              <label for="jamb-reg-input">JAMB Registration Number</label>
+              <input 
+                type="text" 
+                id="jamb-reg-input" 
+                placeholder="e.g. 9876543210" 
+                maxlength="10" 
+                inputmode="numeric"
+              />
+            </div>
+
+            <label class="mt-4 block">
+              <span class="text-xs font-semibold text-foreground/50">
+                Examination Year
+              </span>
+              <select
+                id="exam-year-select"
+                class="mt-2 w-full rounded-xl border border-white/60 bg-white/70 px-4 py-3 text-sm text-foreground outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/40"
+              >
+                <!-- Populated by JS -->
+              </select>
+            </label>
+
+            <!-- Error message container -->
+            <p id="error-message" class="hidden mt-4 text-sm font-semibold text-destructive"></p>
+
+            <button type="submit" id="submit-btn" class="ui-button ui-button-primary mt-6 w-full">
+              Verify Candidate
+            </button>
+
+            <p class="mt-3 text-center text-[11px] text-foreground/40">
+              This is a UI prototype — verification is simulated with mock data.
+            </p>
+          </form>
+        </div>
+
+        <!-- Result panel -->
+        <div>
+          <!-- State 1: Empty -->
+          <div id="state-empty" class="ui-card grid h-full min-h-[16rem] place-items-center text-center">
+            <div>
+              <span class="grid h-12 w-12 mx-auto place-items-center rounded-full bg-primary/10 text-xl text-primary">
+                ✓
+              </span>
+              <p class="mt-3 text-sm font-semibold text-foreground/60">
+                Your verified details will appear here
+              </p>
+              <p class="mt-1 text-xs text-foreground/40">
+                Submit the form to simulate verification.
+              </p>
+            </div>
+          </div>
+
+          <!-- State 2: Loading -->
+          <div id="state-loading" class="hidden ui-card grid h-full min-h-[16rem] place-items-center text-center">
+            <div>
+              <span class="grid h-12 w-12 mx-auto place-items-center rounded-full bg-primary/10 text-lg font-bold text-primary animate-pulse">
+                ⏳
+              </span>
+              <p class="mt-3 text-sm font-semibold text-foreground/60">
+                Contacting JAMB records…
+              </p>
+            </div>
+          </div>
+
+          <!-- State 3: Verified Result -->
+          <div id="state-verified" class="hidden ui-card elevated">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <p class="font-display text-sm font-bold text-foreground/80">
+                Candidate Record
+              </p>
+              <span class="ui-badge ui-badge-success">Verified</span>
+            </div>
+
+            <div class="mt-5 flex flex-col gap-5 sm:flex-row">
+              <img
+                id="result-photo"
+                src=""
+                alt="Candidate photograph"
+                class="h-24 w-24 shrink-0 rounded-2xl object-cover shadow-sm border border-foreground/10"
+                loading="lazy"
+              />
+              <div class="min-w-0">
+                <p id="result-name" class="font-display text-lg font-bold leading-tight">
+                  Loading...
+                </p>
+                <p id="result-jamb-details" class="mt-1 text-xs text-foreground/50">
+                  Loading...
+                </p>
+                <p id="result-institution" class="mt-1 text-xs text-foreground/50">
+                  Loading...
+                </p>
+              </div>
+            </div>
+
+            <!-- Candidate Details Grid -->
+            <dl class="mt-6 grid gap-x-6 gap-y-4 sm:grid-cols-2">
+              <div>
+                <dt class="text-xs font-semibold text-foreground/40">JAMB Score</dt>
+                <dd id="result-score" class="mt-1 text-sm font-medium text-foreground/80">...</dd>
+              </div>
+              <div>
+                <dt class="text-xs font-semibold text-foreground/40">Programme</dt>
+                <dd id="result-programme" class="mt-1 text-sm font-medium text-foreground/80">...</dd>
+              </div>
+              <div>
+                <dt class="text-xs font-semibold text-foreground/40">Email</dt>
+                <dd id="result-email" class="mt-1 text-sm font-medium text-foreground/80">...</dd>
+              </div>
+              <div>
+                <dt class="text-xs font-semibold text-foreground/40">Phone</dt>
+                <dd id="result-phone" class="mt-1 text-sm font-medium text-foreground/80">...</dd>
+              </div>
+              <div>
+                <dt class="text-xs font-semibold text-foreground/40">State of Origin</dt>
+                <dd id="result-state" class="mt-1 text-sm font-medium text-foreground/80">...</dd>
+              </div>
+              <div>
+                <dt class="text-xs font-semibold text-foreground/40">Local Government</dt>
+                <dd id="result-lga" class="mt-1 text-sm font-medium text-foreground/80">...</dd>
+              </div>
+            </dl>
+
+            <div class="mt-6">
+              <p class="text-xs font-semibold text-foreground/40">
+                O'Level Result
+              </p>
+              <ul id="result-olevel-list" class="mt-3 grid gap-2 sm:grid-cols-2">
+                <!-- Dynamically populated by JS -->
+              </ul>
+            </div>
+
+            <div class="mt-6 flex flex-wrap items-center justify-between gap-3">
+              <p class="text-xs text-foreground/50">
+                Records match JAMB. You can now check eligibility.
+              </p>
+              <a href="/eligibility" class="ui-button ui-button-primary">
+                Continue to Eligibility &rarr;
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+    <!-- [PLACEHOLDER: <SiteFooter /> goes here] -->
+    <div id="site-footer-root"></div>
+  </div>
+
+  <script src="verify.js"></script>
+</body>
+</html>

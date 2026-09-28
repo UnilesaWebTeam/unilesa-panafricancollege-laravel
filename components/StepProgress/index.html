@@ -1,0 +1,100 @@
+<!--
+  CONVERSION NOTES: step-progress
+
+  MISSING COMPONENTS (imported in the React file but not pasted):
+  - `cn` from `@/lib/utils` — Tailwind class merger. Replaced with standard HTML class string interpolation in JavaScript.
+
+  MISSING PAGES / ROUTES (linked or navigated to):
+  - /verify — Verification route
+  - /eligibility — Eligibility route
+  - /payment — Payment route
+  - /application — Application form route
+  - /documents — Documents route
+  - /review — Review and Submission route
+
+  SHARED PARTIALS NEEDED (navbar, footer, sidebar, modal, layout):
+  - None (This file itself represents the `StepProgress` layout component to be included in other pages).
+
+  HOOKS / CONTEXT / STATE / STORES USED:
+  - None (Stateless presentational component).
+
+  API CALLS / DATA SOURCES:
+  - `applicationSteps` imported from `@/data/candidate` — Mocked in the JS file since the original data file was not provided.
+
+  ASSETS NEEDED (images, icons, fonts, SVGs):
+  - Custom fonts (Inter, Outfit) via Google Fonts.
+
+  THIRD-PARTY LIBRARIES:
+  - @tanstack/react-router (Link) — Replaced with standard HTML <a> tags.
+  - Tailwind CSS — Maintained via CDN.
+
+  ASSUMPTIONS I MADE:
+  - Because `applicationSteps` wasn't provided, I extrapolated the labels based on the 7 keys listed in `stepRoute`.
+  - Added a global variable `window.CURRENT_STEP` that host pages can set before this script runs to dictate which step is active. Defaults to "verification" for the preview.
+  - Created a `.shadow-brand` CSS class to replace the missing `var(--shadow-brand)` variable from the original React setup.
+
+  TODO BEFORE THIS PAGE IS COMPLETE:
+  - Extract the `<div id="step-progress-container">` block and its JavaScript into your partials system to be included dynamically at the top of the relevant application pages.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Step Progress | Northbridge University</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              DEFAULT: '#0ea5e9',
+              foreground: '#ffffff'
+            },
+            foreground: '#0f172a',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link rel="stylesheet" href="step-progress.css" />
+
+  <!-- Configuration for active step. Set this dynamically per page before step-progress.js loads -->
+  <script>
+    // Valid values: 'verification', 'eligibility', 'payment', 'application', 'documents', 'review', 'submission'
+    window.CURRENT_STEP = "eligibility"; 
+  </script>
+</head>
+<body class="bg-slate-50 antialiased text-foreground">
+
+  <!-- THE ACTUAL STEP PROGRESS PARTIAL -->
+  <div id="step-progress-container" class="mx-auto max-w-7xl px-5 pt-10 lg:px-8">
+    <ol id="step-progress-list" class="flex flex-wrap items-center gap-y-2 gap-x-1 sm:flex-nowrap sm:overflow-x-auto pb-2 scrollbar-hide">
+      <!-- Populated dynamically by JS -->
+    </ol>
+  </div>
+  <!-- END OF STEP PROGRESS PARTIAL -->
+
+  <!-- Dummy content to visualize the page context -->
+  <main class="mx-auto max-w-7xl px-5 py-10 lg:px-8">
+    <div class="rounded-xl border border-foreground/10 bg-white p-8 text-center text-sm text-foreground/50">
+      Page content goes here...
+    </div>
+  </main>
+
+  <script src="step-progress.js"></script>
+</body>
+</html>

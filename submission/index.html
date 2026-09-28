@@ -1,0 +1,150 @@
+<!--
+  CONVERSION NOTES: submission
+
+  MISSING COMPONENTS (imported in the React file but not pasted):
+  - <DashboardShell> — renders the main application layout (sidebar, topbar). Wraps the entire page content. Passes `active="My Application"`.
+  - <Card> — layout container for content blocks.
+  - <Badge> — status pill component.
+
+  MISSING PAGES / ROUTES (linked or navigated to):
+  - /review — linked via "View Application" button.
+  - /screening-slip — linked via "Print Screening Slip" button.
+
+  SHARED PARTIALS NEEDED (navbar, footer, sidebar, modal, layout):
+  - DashboardShell — wraps the entire page content. Provides standard dashboard navigation.
+
+  HOOKS / CONTEXT / STATE / STORES USED:
+  - None
+
+  API CALLS / DATA SOURCES:
+  - None (data provided via local imported static variables which have been mocked in the JS file).
+
+  ASSETS NEEDED (images, icons, fonts, SVGs):
+  - Custom fonts (Inter, Outfit) via Google Fonts.
+
+  THIRD-PARTY LIBRARIES:
+  - @tanstack/react-router (Link) — Replaced with standard HTML <a> tags.
+  - Tailwind CSS — Maintained via CDN. Added custom colors to the config.
+
+  ASSUMPTIONS I MADE:
+  - Assumed the `DashboardShell` layout can be represented by a placeholder wrapping the main content.
+  - Replaced the custom CSS variable `var(--shadow-brand)` with a standard Tailwind shadow (`shadow-lg shadow-primary/30`) for the primary button to ensure it renders correctly without missing CSS variables.
+
+  TODO BEFORE THIS PAGE IS COMPLETE:
+  - Replace the [PLACEHOLDER] comments with the actual HTML structure of your `DashboardShell` (sidebar, nav, etc.).
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Application Submitted | Northbridge University</title>
+  <meta name="description" content="Your Post-UTME application has been submitted successfully. View your application number and screening details." />
+  
+  <meta property="og:title" content="Application Submitted | Northbridge University" />
+  <meta property="og:description" content="Your Post-UTME application has been submitted successfully. View your application number and screening details." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              DEFAULT: '#0ea5e9',
+              foreground: '#ffffff'
+            },
+            foreground: '#0f172a',
+            success: '#16a34a',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link rel="stylesheet" href="submission.css" />
+</head>
+<body class="bg-slate-50 antialiased text-foreground">
+
+  <!-- [PLACEHOLDER: <DashboardShell active="My Application"> starts here] -->
+  <div id="dashboard-shell-placeholder" class="min-h-screen p-4 lg:p-8">
+    
+    <main class="mx-auto max-w-2xl space-y-6">
+      
+      <!-- Success Card -->
+      <div class="ui-card elevated text-center">
+        <div class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-success/10 text-3xl text-success">
+          ✓
+        </div>
+        <h1 class="mt-4 text-2xl font-bold tracking-tight sm:text-3xl font-display">
+          Application Submitted Successfully
+        </h1>
+        <p class="mx-auto mt-2 max-w-md text-sm text-foreground/60">
+          Your Post-UTME application has been received. Keep your application number safe — you will need it for the
+          screening exercise.
+        </p>
+        <div class="mx-auto mt-5 inline-block rounded-2xl border border-primary/20 bg-primary/5 px-6 py-3">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/50">Application Number</p>
+          <p id="display-app-number" class="mt-1 text-xl font-bold tracking-tight text-primary">Loading...</p>
+        </div>
+      </div>
+
+      <!-- Details Card -->
+      <div class="ui-card">
+        <div class="grid gap-3 sm:grid-cols-2">
+          
+          <!-- Dynamic details injected here -->
+          <div id="details-grid-container" class="contents">
+            <!-- Static Samples (Will be overridden by JS) -->
+            <div class="rounded-xl border border-white/60 bg-white/50 px-4 py-3">
+              <p class="text-xs font-semibold text-foreground/50">Candidate Name</p>
+              <p class="mt-1 text-sm font-semibold text-foreground">Loading...</p>
+            </div>
+          </div>
+
+          <!-- Application Status -->
+          <div class="rounded-xl border border-white/60 bg-white/50 px-4 py-3 sm:col-span-2">
+            <p class="text-xs font-semibold text-foreground/50">Application Status</p>
+            <span id="display-status-badge" class="ui-badge ui-badge-success mt-2">
+              Loading... — Awaiting Screening
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <a href="/review" class="frost inline-flex flex-1 items-center justify-center rounded-xl border border-white/50 bg-white/50 px-6 py-3 text-sm font-semibold text-foreground/80 transition hover:bg-white/70">
+          View Application
+        </a>
+        <a href="/screening-slip" class="inline-flex flex-1 items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition hover:bg-primary/90">
+          Print Screening Slip
+        </a>
+      </div>
+
+      <!-- Footer Note -->
+      <p class="text-center text-xs text-foreground/50">
+        Screening holds on 18 October 2026. Check your dashboard notifications for updates. Prototype only — nothing is
+        stored.
+      </p>
+
+    </main>
+
+  </div>
+  <!-- [PLACEHOLDER: </DashboardShell> ends here] -->
+
+  <script src="submission.js"></script>
+</body>
+</html>

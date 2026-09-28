@@ -1,0 +1,15 @@
+/* step-progress.css */
+
+/* Custom Shadow for the active step */
+.shadow-brand {
+  box-shadow: 0 4px 14px 0 rgba(14, 165, 233, 0.39);
+}
+
+/* Utility to hide scrollbars on the flex container when scrolling horizontally on mobile */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

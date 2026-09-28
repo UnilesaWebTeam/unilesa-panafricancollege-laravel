@@ -1,0 +1,133 @@
+<!--
+  CONVERSION NOTES: site-header
+
+  MISSING COMPONENTS (imported in the React file but not pasted):
+  - <Button> — standard interactive buttons.
+
+  MISSING PAGES / ROUTES (linked or navigated to):
+  - / — Home route.
+  - /verify — Apply Now route.
+
+  SHARED PARTIALS NEEDED (navbar, footer, sidebar, modal, layout):
+  - None (This file itself is the SiteHeader partial meant to be inserted into other pages).
+
+  HOOKS / CONTEXT / STATE / STORES USED:
+  - useState (open) — Replaced with vanilla JS toggling of a 'hidden' class on the mobile navigation menu.
+
+  API CALLS / DATA SOURCES:
+  - None (Data provided via local imported static variables which have been mocked in the JS file).
+
+  ASSETS NEEDED (images, icons, fonts, SVGs):
+  - Custom fonts (Inter, Outfit) via Google Fonts.
+
+  THIRD-PARTY LIBRARIES:
+  - @tanstack/react-router (Link) — Replaced with standard HTML <a> tags.
+  - Tailwind CSS — Maintained via CDN. Added custom colors/shadows to config.
+
+  ASSUMPTIONS I MADE:
+  - As a shared partial, I wrapped it in a standard HTML document (`<html>`, `<head>`, `<body>`) so you can open it in a browser to test it independently. Extract the `<header>` element and its scripts/styles to inject into your `site-header-root` containers on other pages.
+  - Mocked `navLinks` with basic portal navigation (Home, Programmes, Contact).
+  - The `onLogin` prop from React is invoked in vanilla JS by checking if a global `window.onLogin` function exists and calling it. This allows the host page (like `index.html`) to pass its modal-opening function to this header.
+  - The `onApply` prop was listed in the React signature but wasn't attached to the "Apply Now" button in the provided JSX (which used a `<Link to="/verify">`). I preserved this behavior.
+
+  TODO BEFORE THIS PAGE IS COMPLETE:
+  - Extract the `<header>` element into your templating system.
+  - In the host page (e.g., `index.js`), define `window.onLogin = () => { /* open modal */ }` before this header's JS executes so the login button works correctly.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Site Header | Northbridge University</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              DEFAULT: '#0ea5e9',
+              foreground: '#ffffff'
+            },
+            foreground: '#0f172a',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link rel="stylesheet" href="site-header.css" />
+</head>
+<body class="bg-slate-50 antialiased text-foreground min-h-screen">
+
+  <!-- THE ACTUAL HEADER PARTIAL -->
+  <header class="ui-glass edge sticky top-0 z-30 border-b border-white/40">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 lg:px-8">
+      
+      <!-- Brand Logo & Text -->
+      <a href="/" class="flex min-w-0 items-center gap-3">
+        <span id="header-uni-short" class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary font-display text-lg font-bold text-primary-foreground shadow-brand">
+          NU
+        </span>
+        <span class="min-w-0 leading-tight">
+          <span id="header-uni-name" class="block truncate font-display text-[15px] font-bold uppercase">
+            Loading...
+          </span>
+          <span id="header-uni-tagline" class="block truncate text-[11px] text-foreground/50">
+            Loading...
+          </span>
+        </span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav id="desktop-nav" class="hidden items-center gap-7 text-sm font-medium text-foreground/70 lg:flex">
+        <!-- Populated by JS -->
+      </nav>
+
+      <!-- Actions -->
+      <div class="flex shrink-0 items-center gap-2">
+        <button id="login-btn" class="ui-button ui-button-ghost hidden px-4 py-2 sm:inline-flex">
+          Login
+        </button>
+        <a href="/verify" class="ui-button ui-button-primary px-4 py-2 rounded-lg">
+          Apply Now
+        </a>
+        <button
+          id="mobile-menu-toggle"
+          aria-label="Toggle menu"
+          class="rounded-lg border border-white/60 bg-white/60 px-3 py-2 text-sm font-semibold text-foreground/70 lg:hidden"
+        >
+          ☰
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav -->
+    <nav id="mobile-nav-container" class="hidden border-t border-white/40 px-5 pb-4 lg:hidden">
+      <ul id="mobile-nav" class="grid gap-1 pt-3 text-sm font-medium text-foreground/70">
+        <!-- Populated by JS -->
+      </ul>
+    </nav>
+  </header>
+  <!-- END OF HEADER PARTIAL -->
+
+  <!-- Dummy content to allow scrolling and testing sticky behavior -->
+  <main class="p-8 text-center text-foreground/50 h-[200vh]">
+    Scroll down to see the sticky header in action.
+  </main>
+
+  <script src="site-header.js"></script>
+</body>
+</html>

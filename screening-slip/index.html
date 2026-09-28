@@ -1,0 +1,203 @@
+<!--
+  CONVERSION NOTES: screening-slip
+
+  MISSING COMPONENTS (imported in the React file but not pasted):
+  - <DashboardShell> — renders the main application layout (sidebar, topbar). Wraps the entire page content. Passes `active="Screening Slip"`.
+  - <Badge> — status pill component. Replaced with custom HTML/CSS class `.ui-badge`.
+  - <Button> — standard interactive buttons. Replaced with standard HTML `<button>` and custom CSS class `.ui-button`.
+
+  MISSING PAGES / ROUTES (linked or navigated to):
+  - /dashboard — linked via "Back to Dashboard" button.
+
+  SHARED PARTIALS NEEDED (navbar, footer, sidebar, modal, layout):
+  - DashboardShell — wraps the entire page content. Provides standard dashboard navigation.
+
+  HOOKS / CONTEXT / STATE / STORES USED:
+  - useState (downloaded) — Replaced with vanilla JS boolean and a `setTimeout` to toggle the visibility of the success banner.
+
+  API CALLS / DATA SOURCES:
+  - None (data provided via local imported static variables which have been mocked in the JS file).
+
+  ASSETS NEEDED (images, icons, fonts, SVGs):
+  - Custom fonts (Inter, Outfit) via Google Fonts.
+  - Candidate Passport Photo — URL referenced in mock data. A generic placeholder is used in the vanilla JS.
+
+  THIRD-PARTY LIBRARIES:
+  - @tanstack/react-router (Link) — Replaced with standard HTML <a> tags.
+  - Tailwind CSS — Maintained via CDN. Added custom colors to the config.
+
+  ASSUMPTIONS I MADE:
+  - Assumed the `DashboardShell` layout can be represented by a wrapper placeholder around the main content.
+  - Added `primary-foreground` to Tailwind config as white (`#ffffff`) for the University logo text contrast.
+  - Used a standard placeholder image URL for `candidate.photo` since the actual asset path was not provided.
+
+  TODO BEFORE THIS PAGE IS COMPLETE:
+  - Replace the [PLACEHOLDER] comments with the actual HTML structure of your `DashboardShell` (sidebar, nav, etc.).
+  - Implement a real PDF generation solution (e.g., html2pdf.js or a backend service) for the "Download PDF" button, which currently only triggers a simulated success banner.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Screening Slip | Northbridge University</title>
+  <meta name="description" content="Print or download your official Post-UTME screening acknowledgement slip with screening date, venue and application details." />
+  
+  <meta property="og:title" content="Screening Slip | Northbridge University" />
+  <meta property="og:description" content="Print or download your official Post-UTME screening acknowledgement slip with screening date, venue and application details." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              DEFAULT: '#0ea5e9',
+              foreground: '#ffffff'
+            },
+            foreground: '#0f172a',
+            success: '#16a34a',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body class="bg-slate-50 antialiased text-foreground">
+
+  <!-- [PLACEHOLDER: <DashboardShell active="Screening Slip"> starts here] -->
+  <div id="dashboard-shell-placeholder" class="min-h-screen p-4 lg:p-8">
+    
+    <main class="mx-auto max-w-3xl space-y-6">
+      
+      <!-- Download Success Banner (Hidden by default) -->
+      <div id="download-banner" class="hidden frost rounded-2xl border border-success/30 bg-success/10 p-4 text-sm font-semibold text-success print:hidden">
+        Screening slip downloaded successfully (simulated).
+      </div>
+
+      <!-- Official slip -->
+      <div id="screening-slip-card" class="overflow-hidden rounded-2xl border border-foreground/15 bg-white text-foreground shadow-[0_20px_50px_-20px_rgba(15,23,42,0.25)]">
+        
+        <!-- Header band -->
+        <div class="flex items-center gap-4 border-b-4 border-double border-foreground/20 bg-foreground/[0.03] px-6 py-5 sm:px-8">
+          <span class="grid h-16 w-16 shrink-0 place-items-center rounded-full border-2 border-foreground/20 bg-primary text-lg font-bold text-primary-foreground">
+            NU
+          </span>
+          <div class="min-w-0 flex-1">
+            <p class="text-lg font-bold uppercase tracking-wide sm:text-xl">Northbridge University</p>
+            <p class="text-xs text-foreground/60">
+              Km 8 Lagos–Ibadan Expressway, Ibadan, Oyo State &middot; admissions@northbridge.edu.ng
+            </p>
+            <p class="mt-1 text-sm font-bold uppercase tracking-[0.15em] text-primary">
+              Post-UTME Screening Acknowledgement Slip
+            </p>
+          </div>
+        </div>
+
+        <div class="px-6 py-6 sm:px-8">
+          
+          <!-- Candidate Bio -->
+          <div class="flex flex-col gap-6 sm:flex-row">
+            <img
+              id="candidate-photo"
+              src=""
+              alt="Candidate Passport Photograph"
+              class="h-32 w-32 shrink-0 self-start rounded-lg border-2 border-foreground/20 object-cover"
+            />
+            <div class="min-w-0 flex-1">
+              <p id="candidate-name" class="text-xl font-bold uppercase tracking-wide">Loading...</p>
+              <span id="candidate-badge" class="ui-badge ui-badge-success mt-2 inline-flex">Loading...</span>
+              
+              <!-- Detail Rows container -->
+              <div id="detail-rows-container" class="mt-4">
+                <!-- Rows injected via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Screening Details Grid -->
+          <div class="mt-6 rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-4">
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-foreground/50">Screening Date</p>
+                <p id="slip-date" class="mt-1 text-sm font-bold">Loading...</p>
+              </div>
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-foreground/50">Screening Venue</p>
+                <p id="slip-venue" class="mt-1 text-sm font-bold">Loading...</p>
+              </div>
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-foreground/50">Payment Reference</p>
+                <p id="slip-reference" class="mt-1 text-sm font-bold">Loading...</p>
+              </div>
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-foreground/50">Application Status</p>
+                <p id="slip-status" class="mt-1 text-sm font-bold text-success">Loading...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Instructions -->
+          <div class="mt-6 text-xs leading-relaxed text-foreground/60">
+            <p class="font-semibold uppercase tracking-wide text-foreground/70">Instructions to candidates</p>
+            <ol class="mt-2 list-decimal space-y-1 pl-4">
+              <li>Bring this slip, your JAMB result slip, and a valid ID to the screening venue.</li>
+              <li>Arrive at least one hour before your scheduled screening time.</li>
+              <li>Mobile phones and electronic devices are not allowed in the screening hall.</li>
+            </ol>
+          </div>
+
+          <!-- Footer/Signatures -->
+          <div class="mt-8 flex items-end justify-between gap-6">
+            <div class="text-xs text-foreground/50">
+              <p>Generated 12 September 2026</p>
+              <p id="slip-footer-app-number" class="mt-1 font-mono">Loading...</p>
+            </div>
+            <div class="text-center">
+              <div class="h-10 w-40 border-b border-foreground/30"></div>
+              <p class="mt-1 text-xs text-foreground/50">Registrar's Signature</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col gap-3 print:hidden sm:flex-row">
+        <button id="btn-print" class="ui-button ui-button-primary flex-1">
+          Print
+        </button>
+        <button id="btn-download" class="ui-button ui-button-ink flex-1">
+          Download PDF
+        </button>
+        <a href="/dashboard" class="frost inline-flex flex-1 items-center justify-center rounded-xl border border-white/50 bg-white/50 px-6 py-3 text-sm font-semibold text-foreground/80 transition hover:bg-white/70 hover:text-primary">
+          Back to Dashboard
+        </a>
+      </div>
+
+      <p class="text-center text-xs text-foreground/50 print:hidden">
+        Prototype only — use your browser's "Save as PDF" option when printing. Mock data shown.
+      </p>
+
+    </main>
+  </div>
+  <!-- [PLACEHOLDER: </DashboardShell> ends here] -->
+
+  <script src="index.js"></script>
+</body>
+</html>

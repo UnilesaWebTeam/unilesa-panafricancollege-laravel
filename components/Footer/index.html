@@ -1,0 +1,142 @@
+<!--
+  CONVERSION NOTES: site-footer
+
+  MISSING COMPONENTS (imported in the React file but not pasted):
+  - None (this is a standalone shared layout component).
+
+  MISSING PAGES / ROUTES (linked or navigated to):
+  - /verify — Quick Link (Verify Candidate)
+  - /eligibility — Quick Link (Eligibility)
+  - / — Home, Programmes, Help Centre, Privacy
+
+  SHARED PARTIALS NEEDED (navbar, footer, sidebar, modal, layout):
+  - None (This file itself is the SiteFooter partial meant to be inserted into other pages).
+
+  HOOKS / CONTEXT / STATE / STORES USED:
+  - None.
+
+  API CALLS / DATA SOURCES:
+  - None (Data provided via local imported static variables which have been mocked in the JS file).
+
+  ASSETS NEEDED (images, icons, fonts, SVGs):
+  - Custom fonts (Inter, Outfit) via Google Fonts.
+
+  THIRD-PARTY LIBRARIES:
+  - @tanstack/react-router (Link) — Replaced with standard HTML <a> tags.
+  - Tailwind CSS — Maintained via CDN.
+
+  ASSUMPTIONS I MADE:
+  - Even though this is a shared partial, I wrapped it in a standard HTML document (`<html>`, `<head>`, `<body>`) so you can open it in a browser to test and verify its appearance independently. In production, you will only extract the `<footer>` tag to inject into the `site-footer-root` containers of your other pages.
+  - The custom `glass` and `edge` utility classes were mapped to `.ui-glass` and `.edge` in the CSS file to match the design language established in previous pages.
+
+  TODO BEFORE THIS PAGE IS COMPLETE:
+  - Extract the `<footer>` element and its associated CSS/JS into your template partial system so it can be loaded at the bottom of the other pages.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Site Footer | Northbridge University</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              DEFAULT: '#0ea5e9',
+              foreground: '#ffffff'
+            },
+            foreground: '#0f172a',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link rel="stylesheet" href="site-footer.css" />
+</head>
+<body class="bg-slate-50 antialiased text-foreground flex flex-col min-h-screen">
+
+  <!-- Spacer to push footer to the bottom for this standalone preview -->
+  <div class="flex-grow"></div>
+
+  <!-- THE ACTUAL FOOTER PARTIAL -->
+  <footer class="ui-glass edge relative border-t border-white/40 mt-auto">
+    <div class="mx-auto grid max-w-7xl gap-8 px-5 py-10 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
+      
+      <!-- Brand & Blurb -->
+      <div>
+        <div class="flex min-w-0 items-center gap-2">
+          <span id="footer-uni-short" class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary font-display font-bold text-primary-foreground">
+            NU
+          </span>
+          <p id="footer-uni-name" class="truncate font-display text-sm font-bold uppercase">
+            Loading...
+          </p>
+        </div>
+        <p id="footer-uni-blurb" class="mt-3 text-xs leading-relaxed text-foreground/50">
+          Loading description...
+        </p>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.15em] text-foreground/40">
+          Quick Links
+        </p>
+        <ul id="quick-links-list" class="mt-3 space-y-2 text-sm text-foreground/60">
+          <!-- Static Sample (Will be overridden by JS) -->
+          <li><a class="transition hover:text-primary" href="/verify">Verify Candidate</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact Info -->
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.15em] text-foreground/40">
+          Contact
+        </p>
+        <ul class="mt-3 space-y-2 text-sm text-foreground/60">
+          <li id="footer-address">Loading...</li>
+          <li id="footer-phone">Loading...</li>
+          <li id="footer-email">Loading...</li>
+        </ul>
+      </div>
+
+      <!-- Portal Links -->
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.15em] text-foreground/40">
+          Portal
+        </p>
+        <ul id="portal-links-list" class="mt-3 space-y-2 text-sm text-foreground/60">
+          <!-- Static Sample (Will be overridden by JS) -->
+          <li><a class="transition hover:text-primary" href="/">Home</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Copyright -->
+    <div class="border-t border-white/40">
+      <p id="footer-copyright" class="mx-auto max-w-7xl px-5 py-4 text-center text-xs text-foreground/40 lg:px-8">
+        © 2025 Loading... All rights reserved.
+      </p>
+    </div>
+  </footer>
+  <!-- END OF FOOTER PARTIAL -->
+
+  <script src="site-footer.js"></script>
+</body>
+</html>

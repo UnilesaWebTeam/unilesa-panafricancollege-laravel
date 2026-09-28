@@ -1,0 +1,211 @@
+<!--
+  CONVERSION NOTES: DashboardShell (Shared Layout Component)
+
+  MISSING COMPONENTS (imported in the React file but not pasted):
+  - <Badge> — status pill component.
+  - <Modal> — overlay dialog component.
+  - `cn` from `@/lib/utils` — Tailwind class merger. Replaced with standard HTML class strings.
+
+  MISSING PAGES / ROUTES (linked or navigated to):
+  - /dashboard — main dashboard view.
+  - /application — forms for personal/academic info.
+  - /documents — document upload page.
+  - /payment — payment processing page.
+  - / — logout/home route.
+  - (Others navigate to dummy prototype modals)
+
+  SHARED PARTIALS NEEDED (navbar, footer, sidebar, modal, layout):
+  - This file itself represents the `DashboardShell` layout wrapper that surrounds page content. 
+  - To use this, you would place page-specific content (like `DashboardPage` or `ReviewPage`) inside the `<div id="dashboard-content-slot"></div>` container.
+
+  HOOKS / CONTEXT / STATE / STORES USED:
+  - useState (mobileOpen) — Replaced with vanilla JS toggling of hidden classes on the mobile sidebar overlay.
+  - useState (demo) — Replaced with vanilla JS modal opener.
+  - useState (showNotifs) — Replaced with vanilla JS modal opener.
+  - useState (showProfile) — Replaced with vanilla JS modal opener.
+
+  API CALLS / DATA SOURCES:
+  - None.
+
+  ASSETS NEEDED (images, icons, fonts, SVGs):
+  - Custom fonts (Inter, Outfit) via Google Fonts.
+  - Candidate Photo — Generic placeholder image URL used for mock candidate photo.
+
+  THIRD-PARTY LIBRARIES:
+  - @tanstack/react-router (Link) — Replaced with standard HTML <a> tags.
+  - Tailwind CSS — Maintained via CDN. Added custom colors/shadows to config.
+
+  ASSUMPTIONS I MADE:
+  - Added custom shadow `shadow-brand` mapping to `box-shadow: 0 4px 14px 0 rgba(14, 165, 233, 0.39)` for active nav states.
+  - Standardized the `<Modal>` structure into a single reusable HTML structure at the end of the file, updated dynamically by JS, instead of rendering three separate modal blocks.
+  - The `active` prop functionality is handled by a small script that finds the nav link whose text matches a `window.DASHBOARD_ACTIVE_TAB` variable or checks the current URL path.
+  
+  TODO BEFORE THIS PAGE IS COMPLETE:
+  - Extract this entire structure (minus the `<head>` and mock `<body>` content) into a layout engine or partial string if you're using a backend template system (like Blade, EJS, or Jinja).
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | Northbridge University</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              DEFAULT: '#0ea5e9',
+              foreground: '#ffffff'
+            },
+            foreground: '#0f172a',
+            success: '#16a34a',
+            background: '#f8fafc' // slate-50 approximation
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link rel="stylesheet" href="dashboard-shell.css" />
+  
+  <!-- Configuration for active tab. Set this dynamically per page before dashboard-shell.js loads -->
+  <script>
+    window.DASHBOARD_ACTIVE_TAB = "Dashboard"; 
+  </script>
+</head>
+<body class="bg-background antialiased text-foreground">
+
+  <div class="min-h-screen bg-background">
+    <div class="mx-auto flex max-w-7xl gap-6 px-4 py-6 lg:px-8">
+      
+      <!-- Desktop Sidebar -->
+      <aside class="ui-glass edge sticky top-6 hidden h-[calc(100vh-3rem)] w-64 shrink-0 flex-col rounded-3xl p-4 lg:flex">
+        <a href="/" class="mb-5 flex items-center gap-3 px-2">
+          <span class="grid h-10 w-10 place-items-center rounded-xl bg-primary text-sm font-bold text-primary-foreground">
+            NU
+          </span>
+          <span class="text-sm font-bold leading-tight">
+            Northbridge
+            <span class="block text-xs font-semibold text-foreground/50">Post-UTME Portal</span>
+          </span>
+        </a>
+        
+        <div class="flex-1 overflow-y-auto">
+          <nav id="desktop-nav" class="space-y-1">
+            <!-- Populated by JS -->
+          </nav>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <div class="min-w-0 flex-1">
+        
+        <!-- Topbar -->
+        <header class="ui-glass edge-sm mb-6 flex items-center justify-between gap-3 rounded-2xl p-4">
+          <div class="flex min-w-0 items-center gap-3">
+            <button
+              type="button"
+              id="mobile-menu-btn"
+              aria-label="Open menu"
+              class="rounded-xl border border-white/60 bg-white/60 px-3 py-2 text-sm lg:hidden"
+            >
+              ☰
+            </button>
+            <div class="min-w-0">
+              <p id="topbar-welcome" class="truncate text-base font-bold tracking-tight sm:text-lg font-display">
+                Welcome, Loading...
+              </p>
+              <p id="topbar-details" class="truncate text-xs text-foreground/50">
+                Loading...
+              </p>
+            </div>
+          </div>
+          
+          <div class="flex shrink-0 items-center gap-2">
+            <!-- Notifications Button -->
+            <button
+              type="button"
+              id="notifs-btn"
+              aria-label="Notifications"
+              class="relative rounded-xl border border-white/60 bg-white/60 px-3 py-2 text-sm transition hover:text-primary"
+            >
+              ◎
+              <span class="absolute -right-1 -top-1 grid h-4 w-4 place-items-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+                3
+              </span>
+            </button>
+            <!-- Profile Button -->
+            <button
+              type="button"
+              id="profile-btn"
+              class="flex items-center gap-2 rounded-xl border border-white/60 bg-white/60 py-1.5 pl-1.5 pr-3 text-sm font-semibold transition hover:text-primary"
+            >
+              <img id="topbar-avatar" src="" alt="" class="h-7 w-7 rounded-lg object-cover" />
+              <span class="hidden sm:inline">Profile</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Dynamic Page Content Injected Here -->
+        <div id="dashboard-content-slot">
+          <!-- EXAMPLE CONTENT REMOVE IN PRODUCTION -->
+          <div class="rounded-xl border border-foreground/10 bg-white p-8 text-center text-sm text-foreground/50">
+            Page content goes here...
+          </div>
+          <!-- /EXAMPLE CONTENT -->
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-overlay" class="hidden fixed inset-0 z-50 flex lg:hidden">
+      <!-- Backdrop -->
+      <div id="mobile-backdrop" class="flex-1 bg-foreground/40 backdrop-blur-sm cursor-pointer"></div>
+      
+      <!-- Drawer -->
+      <div class="ui-glass w-72 overflow-y-auto p-4 transform transition-transform translate-x-0">
+        <div class="mb-4 flex items-center justify-between">
+          <span class="text-sm font-bold">Menu</span>
+          <button id="mobile-close-btn" aria-label="Close menu" class="px-2 text-foreground/50 hover:text-foreground">
+            ✕
+          </button>
+        </div>
+        <nav id="mobile-nav" class="space-y-1">
+          <!-- Populated by JS -->
+        </nav>
+      </div>
+    </div>
+
+    <!-- Reusable Modal Base -->
+    <div id="global-modal" class="hidden fixed inset-0 z-[60] place-items-center bg-foreground/40 p-4 backdrop-blur-sm" aria-modal="true" role="dialog">
+      <div class="ui-glass edge w-full max-w-md rounded-3xl p-6 relative">
+        <div class="flex items-center justify-between mb-4">
+          <h3 id="modal-title" class="text-lg font-bold tracking-tight font-display">Modal Title</h3>
+          <button id="modal-close" class="text-foreground/50 hover:text-foreground p-1">✕</button>
+        </div>
+        
+        <div id="modal-content">
+          <!-- Content injected dynamically -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="dashboard-shell.js"></script>
+</body>
+</html>
