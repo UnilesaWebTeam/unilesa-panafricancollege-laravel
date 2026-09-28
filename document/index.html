@@ -1,0 +1,105 @@
+<!--
+  CONVERSION NOTES: documents.html
+
+  MISSING COMPONENTS (imported in the React file but not pasted):
+  - DashboardShell — Wraps the layout with navigation sidebar/topbar and active state "Documents". Replaced with placeholder container `<div id="dashboard-shell-root">`.
+  - Badge — Rendered as inline status indicators with tone-based styles (`brand`, `success`, `neutral`). Replaced with `.badge` CSS class with modifier classes (`.badge-brand`, `.badge-success`, `.badge-neutral`).
+  - Button — Action elements with visual variants (`primary`, `glass`, `ghost`, `destructive`). Replaced with standard HTML `<button>` elements styled via CSS `.btn` classes.
+  - Card — Container element with glassmorphism background and optional elevated shadow (`elevated`). Replaced with `.card` and `.card-elevated` classes.
+
+  MISSING DATA / CONSTANTS:
+  - `@/data/documents` (`requiredDocuments`) — Mock required documents dataset. Replaced with static JS array `requiredDocuments`.
+  - `@/lib/utils` (`cn`) — Utility for class concatenation. Replaced with direct template literals and DOM manipulation in JS.
+
+  SHARED PARTIALS NEEDED (navbar, footer, sidebar, layout):
+  - DashboardShell Layout (Sidebar & Topbar) — Belongs around the `#dashboard-shell-root` container.
+
+  HOOKS / CONTEXT / STATE / STORES USED:
+  - TanStack Router (`createFileRoute`) — Meta tags placed directly in HTML `<head>`.
+  - React `useState` (`uploads`, `notice`) & `useRef` (`inputRefs`) — Replaced with JS state object `state`, URL blob manager, and DOM event handlers.
+
+  ASSETS NEEDED (images, icons, fonts, SVGs):
+  - System font stack or custom web font (Inter/Sans-serif) — Managed via CSS variables.
+
+  THIRD-PARTY LIBRARIES:
+  - `@tanstack/react-router` — Replaced with HTML document metadata.
+
+  ASSUMPTIONS I MADE:
+  - Kept layout responsive using standard CSS grid and flexbox corresponding to Tailwind utility classes (`grid-cols-1`, `lg:grid-cols-2`).
+  - File upload preview uses `URL.createObjectURL` for image previews and revokes previous object URLs to prevent memory leaks.
+
+  TODO BEFORE THIS PAGE IS COMPLETE:
+  - Connect dynamic API endpoints to upload binary file data (e.g. multipart/form-data to server).
+  - Embed full DashboardShell navbar/sidebar layout wrapper once available.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document Upload | Northbridge University</title>
+  <meta name="description" content="Upload your passport photograph, O'Level result, JAMB result, birth certificate, NIN slip and other required documents.">
+  <meta property="og:title" content="Document Upload | Northbridge University">
+  <meta property="og:description" content="Upload your passport photograph, O'Level result, JAMB result, birth certificate, NIN slip and other required documents.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="documents.css">
+</head>
+<body>
+
+  <!-- [PLACEHOLDER: DashboardShell layout wrapper start] -->
+  <div id="dashboard-shell-root">
+
+    <main class="container">
+      <div class="space-y-6">
+
+        <!-- Progress Overview Card -->
+        <section class="card card-elevated">
+          <div class="flex-header">
+            <div>
+              <p class="subtitle">Documents</p>
+              <h1 class="page-title">Document Upload</h1>
+              <p class="section-desc">
+                Upload clear scans of each required document. Files are simulated in this prototype.
+              </p>
+            </div>
+            <span id="required-progress-badge" class="badge badge-brand">
+              0/0 required uploaded
+            </span>
+          </div>
+
+          <div
+            id="progress-bar-container"
+            class="progress-bar-bg"
+            role="progressbar"
+            aria-valuenow="0"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          >
+            <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%;"></div>
+          </div>
+        </section>
+
+        <!-- Notification Notice -->
+        <div id="notice-container" class="notice-box hidden" role="status">
+          <span id="notice-text"></span>
+        </div>
+
+        <!-- Document Grid -->
+        <div id="documents-grid" class="grid grid-docs">
+          <!-- Rendered dynamically via documents.js -->
+        </div>
+
+        <p class="footer-note">
+          Prototype only — selected files stay in your browser and are never uploaded.
+        </p>
+
+      </div>
+    </main>
+
+  </div>
+  <!-- [PLACEHOLDER: DashboardShell layout wrapper end] -->
+
+  <script src="documents.js"></script>
+</body>
+</html>
