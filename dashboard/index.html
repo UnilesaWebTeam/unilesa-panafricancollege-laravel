@@ -1,0 +1,337 @@
+<!--
+  CONVERSION NOTES: application.html
+
+  MISSING COMPONENTS (imported in the React file but not pasted):
+  - DashboardShell — Wraps the main layout with active page "My Application". Replaced with placeholder container `<div id="dashboard-shell-root">`.
+  - Alert — Renders warning/error alert banner when form has validation errors. Replaced with custom static markup container `#alert-container`.
+  - Badge — Displays dynamic progress percentage. Replaced with `.badge` component in CSS.
+  - Card — Surface container with elevation/glass styling (`elevated` variant). Replaced with `.card` and `.card-elevated` classes.
+  - Field — Reusable labeled input component. Replaced with standard HTML `<label>` and `<input>` markup.
+  - TextField — Textarea component with label. Replaced with standard HTML `<label>` and `<textarea>` markup.
+  - Button — Styled button with variants (`glass`, `ink`, standard primary). Replaced with HTML `<button>` elements with class variants `.btn-glass`, `.btn-ink`, `.btn-primary`.
+
+  MISSING PAGES / ROUTES (linked or navigated to):
+  - /dashboard — Referenced on the final step's "Back to Dashboard" link. Converted to `<a href="/dashboard">`.
+
+  SHARED PARTIALS NEEDED (navbar, footer, sidebar, modal, layout):
+  - DashboardShell Layout (Sidebar & Topbar) — Belongs around the `#application-container` main section.
+
+  HOOKS / CONTEXT / STATE / STORES USED:
+  - TanStack Router (`createFileRoute`, `Link`) — Meta tags added to HTML head; Link converted to regular `<a>`.
+  - React `useState` — Replaced with plain JS module object `state` and explicit `render()` / DOM update functions.
+
+  API CALLS / DATA SOURCES:
+  - `@/data/candidate` (`mockCandidate`) — Mock candidate data object providing initial field values (fullName, phone, email, stateOfOrigin, localGovernment, programme, jambReg, jambScore, examinationYear, oLevel). Replaced with static JS object `mockCandidate`.
+
+  ASSETS NEEDED (images, icons, fonts, SVGs):
+  - Checkmark icon/character — Native text check mark `✓` used in step indicators.
+  - Custom font (e.g., Inter or sans-serif stack) — Applied via CSS variables.
+
+  THIRD-PARTY LIBRARIES:
+  - `@tanstack/react-router` — Replaced with standard anchor tags and HTML document metadata.
+  - `@/lib/utils` (`cn`) — Replaced with explicit DOM `classList` toggles and class strings in vanilla JavaScript.
+
+  ASSUMPTIONS I MADE:
+  - Converted Tailwind classes and custom design variables (glassmorphism/frost, primary/destructive theme tokens) into modular plain CSS variables.
+  - Simulated attachment of birth certificate via demo button by updating hidden input value.
+
+  TODO BEFORE THIS PAGE IS COMPLETE:
+  - Connect form submission to a real REST API endpoint for saving application progress.
+  - Integrate DashboardShell partial/layout markup once available.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Application Form | Northbridge University</title>
+  <meta name="description" content="Complete your Post-UTME application form: personal details, academic records, next of kin and birth information.">
+  <meta property="og:title" content="Application Form | Northbridge University">
+  <meta property="og:description" content="Complete your Post-UTME application form: personal details, academic records, next of kin and birth information.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="application.css">
+</head>
+<body>
+
+  <!-- [PLACEHOLDER: DashboardShell layout wrapper start] -->
+  <div id="dashboard-shell-root">
+    
+    <main class="container">
+      <div class="space-y-6">
+        
+        <!-- Header Card -->
+        <section class="card card-elevated">
+          <div class="flex-header">
+            <div>
+              <p class="subtitle">Application form</p>
+              <h1 id="step-title" class="page-title">Personal Information</h1>
+              <p id="step-subtitle" class="step-meta">Step 1 of 4 · Computer Science</p>
+            </div>
+            <span id="completion-badge" class="badge badge-brand">25% complete</span>
+          </div>
+
+          <ol id="step-navigation" class="step-list">
+            <!-- Dynamically populated or rendered static initial structure -->
+            <li>
+              <button type="button" class="step-btn active" data-step="0">
+                <span class="step-num">1</span>
+                Personal Information
+              </button>
+            </li>
+            <li>
+              <button type="button" class="step-btn" data-step="1">
+                <span class="step-num">2</span>
+                Academic Information
+              </button>
+            </li>
+            <li>
+              <button type="button" class="step-btn" data-step="2">
+                <span class="step-num">3</span>
+                Next of Kin
+              </button>
+            </li>
+            <li>
+              <button type="button" class="step-btn" data-step="3">
+                <span class="step-num">4</span>
+                Birth Information
+              </button>
+            </li>
+          </ol>
+
+          <div class="progress-bar-bg">
+            <div id="progress-bar-fill" class="progress-bar-fill" style="width: 25%;"></div>
+          </div>
+        </section>
+
+        <!-- Alert Container -->
+        <div id="alert-container" class="alert alert-destructive hidden" role="alert">
+          Some fields need attention. Correct the highlighted entries and try again.
+        </div>
+
+        <!-- Success Toast Container -->
+        <div id="saved-container" class="alert-success hidden" role="status">
+          <span id="saved-text"></span>
+        </div>
+
+        <!-- Form Card -->
+        <section class="card card-elevated">
+          <form id="application-form" novalidate>
+            
+            <!-- STEP 0: Personal Information -->
+            <div id="step-section-0" class="step-section grid grid-2">
+              <div class="field-group">
+                <label for="fullName" class="field-label">Full Name</label>
+                <input type="text" id="fullName" class="input-field" value="">
+                <p id="error-fullName" class="error-text hidden"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="dob" class="field-label">Date of Birth</label>
+                <input type="date" id="dob" class="input-field" value="">
+                <p id="error-dob" class="error-text hidden"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="gender" class="field-label">Gender</label>
+                <select id="gender" class="select-field">
+                  <option value="">Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+                <p id="error-gender" class="error-text hidden"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="phone" class="field-label">Phone Number</label>
+                <input type="tel" id="phone" class="input-field" value="">
+                <p id="error-phone" class="error-text hidden"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="email" class="field-label">Email</label>
+                <input type="email" id="email" class="input-field" value="">
+                <p id="error-email" class="error-text hidden"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="stateOfOrigin" class="field-label">State of Origin</label>
+                <input type="text" id="stateOfOrigin" class="input-field" value="">
+                <p id="error-stateOfOrigin" class="error-text hidden"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="lga" class="field-label">Local Government</label>
+                <input type="text" id="lga" class="input-field" value="">
+                <p id="error-lga" class="error-text hidden"></p>
+              </div>
+
+              <div class="field-group col-span-2">
+                <label for="address" class="field-label">Home Address</label>
+                <textarea id="address" rows="3" class="input-field"></textarea>
+                <p id="error-address" class="error-text hidden"></p>
+              </div>
+            </div>
+
+            <!-- STEP 1: Academic Information (Read-only) -->
+            <div id="step-section-1" class="step-section space-y-5 hidden">
+              <p class="section-description">
+                These details are pulled from your verified JAMB record and cannot be edited.
+              </p>
+              
+              <div class="grid grid-2">
+                <div class="info-tile">
+                  <p class="info-label">JAMB Registration Number</p>
+                  <p id="info-jambReg" class="info-value">202490012345EF</p>
+                </div>
+                <div class="info-tile">
+                  <p class="info-label">JAMB Score</p>
+                  <p id="info-jambScore" class="info-value">278 / 400</p>
+                </div>
+                <div class="info-tile">
+                  <p class="info-label">Examination Year</p>
+                  <p id="info-examYear" class="info-value">2024</p>
+                </div>
+                <div class="info-tile">
+                  <p class="info-label">Programme</p>
+                  <p id="info-programme" class="info-value">Computer Science</p>
+                </div>
+              </div>
+
+              <div>
+                <p class="table-caption">O'Level Result</p>
+                <div class="table-container">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Subject</th>
+                        <th>Grade</th>
+                      </tr>
+                    </thead>
+                    <tbody id="olevel-table-body">
+                      <!-- Dynamically or statically mapped -->
+                      <tr>
+                        <td>Mathematics</td>
+                        <td class="grade-text">A1</td>
+                      </tr>
+                      <tr>
+                        <td>English Language</td>
+                        <td class="grade-text">B2</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 2: Next of Kin -->
+            <div id="step-section-2" class="step-section grid grid-2 hidden">
+              <div class="field-group">
+                <label for="kinName" class="field-label">Full Name</label>
+                <input type="text" id="kinName" class="input-field" value="">
+                <p id="error-kinName" class="error-text hidden"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="kinRelationship" class="field-label">Relationship</label>
+                <select id="kinRelationship" class="select-field">
+                  <option value="">Select relationship</option>
+                  <option value="Father">Father</option>
+                  <option value="Mother">Mother</option>
+                  <option value="Guardian">Guardian</option>
+                  <option value="Sibling">Sibling</option>
+                  <option value="Spouse">Spouse</option>
+                </select>
+                <p id="error-kinRelationship" class="error-text hidden"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="kinPhone" class="field-label">Phone Number</label>
+                <input type="tel" id="kinPhone" class="input-field" value="">
+                <p id="error-kinPhone" class="error-text hidden"></p>
+              </div>
+
+              <div class="field-group col-span-2">
+                <label for="kinAddress" class="field-label">Address</label>
+                <textarea id="kinAddress" rows="3" class="input-field"></textarea>
+                <p id="error-kinAddress" class="error-text hidden"></p>
+              </div>
+            </div>
+
+            <!-- STEP 3: Birth Information -->
+            <div id="step-section-3" class="step-section grid grid-2 hidden">
+              <div class="field-group">
+                <label for="placeOfBirth" class="field-label">Place of Birth</label>
+                <input type="text" id="placeOfBirth" class="input-field" value="">
+                <p id="error-placeOfBirth" class="error-text hidden"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="nationality" class="field-label">Nationality</label>
+                <input type="text" id="nationality" class="input-field" value="">
+                <p id="error-nationality" class="error-text hidden"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="religion" class="field-label">Religion</label>
+                <input type="text" id="religion" class="input-field" value="">
+              </div>
+
+              <div class="field-group">
+                <label for="maritalStatus" class="field-label">Marital Status</label>
+                <select id="maritalStatus" class="select-field">
+                  <option value="">Select status</option>
+                  <option value="Single">Single</option>
+                  <option value="Married">Married</option>
+                </select>
+                <p id="error-maritalStatus" class="error-text hidden"></p>
+              </div>
+
+              <div class="field-group col-span-2">
+                <span class="field-label">Birth Certificate / Age Declaration</span>
+                <div class="upload-box">
+                  <span id="birth-cert-filename" class="upload-text">
+                    No file attached (PDF or JPG, max 2MB)
+                  </span>
+                  <button type="button" id="btn-attach-doc" class="btn btn-glass px-4 py-2">
+                    Attach document
+                  </button>
+                </div>
+                <p id="error-birthCertificate" class="error-text hidden"></p>
+              </div>
+            </div>
+
+            <!-- Actions Bar -->
+            <div class="form-actions">
+              <button type="button" id="btn-previous" class="btn btn-glass" disabled>
+                Previous
+              </button>
+              <button type="button" id="btn-save" class="btn btn-ink">
+                Save &amp; Continue
+              </button>
+
+              <button type="submit" id="btn-next" class="btn btn-primary">
+                Next
+              </button>
+
+              <a href="/dashboard" id="btn-dashboard" class="btn btn-primary hidden">
+                Back to Dashboard
+              </a>
+
+              <span class="demo-note">
+                Prototype only — nothing is stored.
+              </span>
+            </div>
+
+          </form>
+        </section>
+
+      </div>
+    </main>
+
+  </div>
+  <!-- [PLACEHOLDER: DashboardShell layout wrapper end] -->
+
+  <script src="application.js"></script>
+</body>
+</html>
