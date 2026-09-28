@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const university = {
     name: "Pan African College of Education",
     short: "NU",
-    blurb: "In partnership with Unilesa, Pan African College of Education is a centre of excellence committed to advancing knowledge and transforming lives through innovative learning and research.",
+    blurb: "In affiliation with Unilesa, Pan African College of Education is a centre of excellence committed to advancing knowledge and transforming lives through innovative learning and research.",
     address: "Km 8 Lagos–Ibadan Expressway, Ibadan, Oyo State",
     phone: "+234 800 123 4567",
     email: "admissions@northbridge.edu.ng"

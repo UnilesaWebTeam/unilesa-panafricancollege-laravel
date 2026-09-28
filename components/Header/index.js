@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const university = {
     name: "Pan African College of Education",
     short: "NU",
-    tagline: "In Partnership with Unilesa"
+    tagline: "In affiliation with Unilesa"
   };
 
   const navLinks = [
