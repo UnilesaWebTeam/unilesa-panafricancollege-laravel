@@ -3,20 +3,19 @@
 document.addEventListener('DOMContentLoaded', () => {
   // --- MOCK DATA ---
   const university = {
-    name: "Northbridge University",
+    name: "Pan African College of Education",
     short: "NU",
-    tagline: "Post-UTME Application Portal"
+    tagline: "In Partnership with Unilesa"
   };
 
   const navLinks = [
-    { label: "Home", href: "/" },
-    { label: "Programmes", href: "/#programmes" },
-    { label: "Important Info", href: "/#about" },
-    { label: "Contact", href: "/#contact" }
+    { label: "Home", href: "../landing-page/index.html" },
+    { label: "Programmes", href: "../landing-page/index.html#programmes" },
+    { label: "Important Info", href: "../landing-page/index.html#about" },
+    { label: "Contact", href: "../landing-page/index.html#contact" }
   ];
 
   // --- DOM ELEMENTS ---
-  const uniShort = document.getElementById('header-uni-short');
   const uniName = document.getElementById('header-uni-name');
   const uniTagline = document.getElementById('header-uni-tagline');
   
@@ -28,9 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginBtn = document.getElementById('login-btn');
 
   // --- POPULATE BRAND DATA ---
-  uniShort.textContent = university.short;
-  uniName.textContent = university.name;
-  uniTagline.textContent = university.tagline;
+  if (uniName) uniName.textContent = university.name;
+  if (uniTagline) uniTagline.textContent = university.tagline;
 
   // --- POPULATE NAVIGATION ---
   const currentPath = window.location.pathname;

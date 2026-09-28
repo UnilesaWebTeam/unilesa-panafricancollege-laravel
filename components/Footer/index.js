@@ -3,28 +3,27 @@
 document.addEventListener('DOMContentLoaded', () => {
   // --- MOCK DATA (from @/data/portal) ---
   const university = {
-    name: "Northbridge University",
+    name: "Pan African College of Education",
     short: "NU",
-    blurb: "A centre of excellence committed to advancing knowledge and transforming lives through innovative learning and research.",
+    blurb: "In partnership with Unilesa, Pan African College of Education is a centre of excellence committed to advancing knowledge and transforming lives through innovative learning and research.",
     address: "Km 8 Lagos–Ibadan Expressway, Ibadan, Oyo State",
     phone: "+234 800 123 4567",
     email: "admissions@northbridge.edu.ng"
   };
 
   const quickLinks = [
-    { label: "Verify Candidate", to: "/verify" },
-    { label: "Eligibility", to: "/eligibility" },
-    { label: "Programmes", to: "/" },
+    { label: "Verify Candidate", to: "../verify/index.html" },
+    { label: "Eligibility", to: "../eligibility/index.html" },
+    { label: "Programmes", to: "../landing-page/index.html" },
   ];
 
   const portalLinks = [
-    { label: "Home", to: "/" },
-    { label: "Help Centre", to: "/" },
-    { label: "Privacy", to: "/" },
+    { label: "Home", to: "../landing-page/index.html" },
+    { label: "Help Centre", to: "../landing-page/index.html" },
+    { label: "Privacy", to: "../landing-page/index.html" },
   ];
 
   // --- DOM ELEMENTS ---
-  const uniShort = document.getElementById('footer-uni-short');
   const uniName = document.getElementById('footer-uni-name');
   const uniBlurb = document.getElementById('footer-uni-blurb');
   
@@ -39,9 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- RENDER POPULATION ---
   // Brand
-  uniShort.textContent = university.short;
-  uniName.textContent = university.name;
-  uniBlurb.textContent = university.blurb;
+  if (uniName) uniName.textContent = university.name;
+  if (uniBlurb) uniBlurb.textContent = university.blurb;
 
   // Contact
   address.textContent = university.address;

@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const slip = {
     applicationNumber: "PUTME/2026/001245",
     screeningDate: "Saturday, 18 October 2026 · 9:00 AM",
-    venue: "Main Auditorium, Northbridge University, Ibadan Campus",
+    venue: "Main Auditorium, Pan African College of Education, Ibadan Campus",
     status: "Submitted — Awaiting Screening",
     paymentReference: "POSTUTME-2026-001245",
   };

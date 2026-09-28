@@ -11,7 +11,7 @@
   - Button — Styled button with variants (`glass`, `ink`, standard primary). Replaced with HTML `<button>` elements with class variants `.btn-glass`, `.btn-ink`, `.btn-primary`.
 
   MISSING PAGES / ROUTES (linked or navigated to):
-  - /dashboard — Referenced on the final step's "Back to Dashboard" link. Converted to `<a href="/dashboard">`.
+  - /dashboard — Referenced on the final step's "Back to Dashboard" link. Converted to `<a href="../dashboard/index.html">`.
 
   SHARED PARTIALS NEEDED (navbar, footer, sidebar, modal, layout):
   - DashboardShell Layout (Sidebar & Topbar) — Belongs around the `#application-container` main section.
@@ -44,18 +44,90 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Application Form | Northbridge University</title>
+  <title>Application Form | Pan African College of Education</title>
   <meta name="description" content="Complete your Post-UTME application form: personal details, academic records, next of kin and birth information.">
-  <meta property="og:title" content="Application Form | Northbridge University">
+  <meta property="og:title" content="Application Form | Pan African College of Education">
   <meta property="og:description" content="Complete your Post-UTME application form: personal details, academic records, next of kin and birth information.">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="index.css">
+<link rel="stylesheet" href="../components/Header/index.css" />
+  <link rel="stylesheet" href="../components/DashboardShell/index.css" />
 </head>
 <body>
 
-  <!-- [PLACEHOLDER: DashboardShell layout wrapper start] -->
-  <div id="dashboard-shell-root">
+  <div class="min-h-screen bg-background">
+    <div class="mx-auto flex max-w-7xl gap-6 px-4 py-6 lg:px-8">
+      
+      <!-- Desktop Sidebar -->
+      <aside class="ui-glass edge sticky top-6 hidden h-[calc(100vh-3rem)] w-64 shrink-0 flex-col rounded-3xl p-4 lg:flex">
+        <a href="../landing-page/index.html" class="mb-5 flex items-center gap-3 px-2">
+          <img src="../images/partnership-banner.png" alt="Partnership Banner" class="h-12 shrink-0 w-auto object-contain" />
+          <span class="text-sm font-bold leading-tight">
+            Pan African College
+            <span class="block text-xs font-semibold text-foreground/50">In Partnership with Unilesa</span>
+          </span>
+        </a>
+        
+        <div class="flex-1 overflow-y-auto">
+          <nav id="desktop-nav" class="space-y-1">
+            <!-- Populated by JS -->
+          </nav>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <div class="min-w-0 flex-1">
+        
+        <!-- Topbar -->
+        <header class="ui-glass edge-sm mb-6 flex items-center justify-between gap-3 rounded-2xl p-4">
+          <div class="flex min-w-0 items-center gap-3">
+            <button
+              type="button"
+              id="mobile-menu-btn"
+              aria-label="Open menu"
+              class="rounded-xl border border-white/60 bg-white/60 px-3 py-2 text-sm lg:hidden"
+            >
+              ☰
+            </button>
+            <div class="min-w-0">
+              <p id="topbar-welcome" class="truncate text-base font-bold tracking-tight sm:text-lg font-display">
+                Welcome, Loading...
+              </p>
+              <p id="topbar-details" class="truncate text-xs text-foreground/50">
+                Loading...
+              </p>
+            </div>
+          </div>
+          
+          <div class="flex shrink-0 items-center gap-2">
+            <!-- Notifications Button -->
+            <button
+              type="button"
+              id="notifs-btn"
+              aria-label="Notifications"
+              class="relative rounded-xl border border-white/60 bg-white/60 px-3 py-2 text-sm transition hover:text-primary"
+            >
+              ◎
+              <span class="absolute -right-1 -top-1 grid h-4 w-4 place-items-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+                3
+              </span>
+            </button>
+            <!-- Profile Button -->
+            <button
+              type="button"
+              id="profile-btn"
+              class="flex items-center gap-2 rounded-xl border border-white/60 bg-white/60 py-1.5 pl-1.5 pr-3 text-sm font-semibold transition hover:text-primary"
+            >
+              <img id="topbar-avatar" src="" alt="" class="h-7 w-7 rounded-lg object-cover" />
+              <span class="hidden sm:inline">Profile</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Dynamic Page Content Injected Here -->
+        <div id="dashboard-content-slot">
+          
     
     <main class="container">
       <div class="space-y-6">
@@ -314,7 +386,7 @@
                 Next
               </button>
 
-              <a href="/dashboard" id="btn-dashboard" class="btn btn-primary hidden">
+              <a href="../dashboard/index.html" id="btn-dashboard" class="btn btn-primary hidden">
                 Back to Dashboard
               </a>
 
@@ -329,9 +401,51 @@
       </div>
     </main>
 
-  </div>
-  <!-- [PLACEHOLDER: DashboardShell layout wrapper end] -->
+  
+        </div>
 
+      </div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-overlay" class="hidden fixed inset-0 z-50 flex lg:hidden">
+      <!-- Backdrop -->
+      <div id="mobile-backdrop" class="flex-1 bg-foreground/40 backdrop-blur-sm cursor-pointer"></div>
+      
+      <!-- Drawer -->
+      <div class="ui-glass w-72 overflow-y-auto p-4 transform transition-transform translate-x-0">
+        <div class="mb-4 flex items-center justify-between">
+          <span class="text-sm font-bold">Menu</span>
+          <button id="mobile-close-btn" aria-label="Close menu" class="px-2 text-foreground/50 hover:text-foreground">
+            ✕
+          </button>
+        </div>
+        <nav id="mobile-nav" class="space-y-1">
+          <!-- Populated by JS -->
+        </nav>
+      </div>
+    </div>
+
+    <!-- Reusable Modal Base -->
+    <div id="global-modal" class="hidden fixed inset-0 z-[60] place-items-center bg-foreground/40 p-4 backdrop-blur-sm" aria-modal="true" role="dialog">
+      <div class="ui-glass edge w-full max-w-md rounded-3xl p-6 relative">
+        <div class="flex items-center justify-between mb-4">
+          <h3 id="modal-title" class="text-lg font-bold tracking-tight font-display">Modal Title</h3>
+          <button id="modal-close" class="text-foreground/50 hover:text-foreground p-1">✕</button>
+        </div>
+        
+        <div id="modal-content">
+          <!-- Content injected dynamically -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  
+
+  <script src="../components/Header/index.js"></script>
+  <script src="../components/DashboardShell/index.js"></script>
   <script src="index.js"></script>
 </body>
 </html>

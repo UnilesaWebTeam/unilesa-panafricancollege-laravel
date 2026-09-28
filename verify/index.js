@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   const mockCandidateTemplate = {
     fullName: "Jane Doe",
-    institution: "Northbridge University",
+    institution: "Pan African College of Education",
     jambScore: 245,
     programme: "B.Sc. Computer Science",
     email: "jane.doe@example.com",

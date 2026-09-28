@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fullName: "Jane Doe",
     jambReg: "202512345678DF",
     programme: "B.Sc. Computer Science",
-    institution: "Northbridge University"
+    institution: "Pan African College of Education"
   };
   
   const FEE = 5000;

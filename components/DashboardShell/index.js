@@ -11,17 +11,17 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const navItems = [
-    { label: "Dashboard", icon: "▤", to: "/dashboard" },
-    { label: "My Application", icon: "▦", to: "/application" },
-    { label: "Personal Information", icon: "◍", to: "/application" },
-    { label: "Academic Information", icon: "✎", to: "/application" },
+    { label: "Dashboard", icon: "▤", to: "../dashboard/index.html" },
+    { label: "My Application", icon: "▦", to: "../application/index.html" },
+    { label: "Personal Information", icon: "◍", to: "../application/index.html" },
+    { label: "Academic Information", icon: "✎", to: "../application/index.html" },
     { label: "Documents", icon: "❐", to: "/documents" },
-    { label: "Payment", icon: "₦", to: "/payment" },
+    { label: "Payment", icon: "₦", to: "../payment/index.html" },
     { label: "Screening Slip", icon: "🖨" },
     { label: "Admission Status", icon: "★" },
     { label: "Notifications", icon: "◎" },
     { label: "Profile", icon: "☺" },
-    { label: "Logout", icon: "⏻", to: "/" },
+    { label: "Logout", icon: "⏻", to: "../landing-page/index.html" },
   ];
 
   const notifications = [
