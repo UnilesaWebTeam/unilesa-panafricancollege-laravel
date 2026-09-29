@@ -11,7 +11,7 @@ const requiredDocuments = [
   { key: "jamb", name: "JAMB Result Slip", hint: "Original JAMB result with passport photo", required: true },
   { key: "birthCert", name: "Birth Certificate / Declaration", hint: "Official birth certificate or court declaration", required: true },
   { key: "nin", name: "NIN Slip", hint: "National Identification Number slip", required: true },
-  { key: "testimonial", name: "Secondary School Testimonial", hint: "Signed by secondary school principal", required: false },
+  { key: "other", name: "Other Required Documents", hint: "Any other supporting documents", required: false },
 ];
 
 // Initial mock uploaded files

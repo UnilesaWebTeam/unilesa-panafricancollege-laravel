@@ -50,11 +50,40 @@
   <meta property="og:description" content="Complete your Post-UTME application form: personal details, academic records, next of kin and birth information.">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
+    <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              DEFAULT: '#0ea5e9',
+              foreground: '#ffffff'
+            },
+            foreground: '#0f172a',
+            success: '#16a34a',
+            destructive: '#dc2626',
+            brand: '#0ea5e9',
+          }
+        }
+      }
+    }
+  </script>
   <link rel="stylesheet" href="index.css">
 <link rel="stylesheet" href="../components/Header/index.css" />
   <link rel="stylesheet" href="../components/DashboardShell/index.css" />
 </head>
-<body>
+<body class="bg-slate-50 antialiased text-foreground">
 
   <div class="min-h-screen bg-background">
     <div class="mx-auto flex max-w-7xl gap-6 px-4 py-6 lg:px-8">

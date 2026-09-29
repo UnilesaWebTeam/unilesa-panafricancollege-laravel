@@ -151,15 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- STATE UPDATES ---
   const updateSubmittedUI = () => {
     if (submitted) {
-      headerBadge.textContent = "Submitted";
-      headerBadge.className = "ui-badge ui-badge-success";
-      
-      successBanner.classList.remove('hidden');
-      
-      confirmCheckbox.disabled = true;
-      submitBtn.disabled = true;
-      submitBtn.classList.add('disabled');
-      submitBtn.textContent = "Application Submitted";
+      // Redirect to the submission success page
+      window.location.href = "../submission/index.html";
     }
   };
 
