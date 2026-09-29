@@ -2,14 +2,14 @@
 document.addEventListener('DOMContentLoaded', () => {
   const adminNavItems = [
     { label: "Dashboard", to: "../admin-dashboard/index.html" },
-    { label: "Candidates", to: "#", active: true },
-    { label: "Applications", to: "#" },
-    { label: "Documents", to: "#" },
-    { label: "Screening", to: "#" },
-    { label: "Admission", to: "#" },
-    { label: "Reports", to: "#" },
-    { label: "Notifications", to: "#" },
-    { label: "Profile", to: "#" },
+    { label: "Candidates", to: "../landing-page/index.html", active: true },
+    { label: "Applications", to: "../landing-page/index.html" },
+    { label: "Documents", to: "../landing-page/index.html" },
+    { label: "Screening", to: "../landing-page/index.html" },
+    { label: "Admission", to: "../landing-page/index.html" },
+    { label: "Reports", to: "../landing-page/index.html" },
+    { label: "Notifications", to: "../landing-page/index.html" },
+    { label: "Profile", to: "../landing-page/index.html" },
     { label: "Logout", to: "../landing-page/index.html" },
   ];
 

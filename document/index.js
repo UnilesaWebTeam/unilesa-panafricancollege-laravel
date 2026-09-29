@@ -7,17 +7,15 @@ const CONFIG = {
 // Mock required documents list matching `@/data/documents`
 const requiredDocuments = [
   { key: "passport", name: "Passport Photograph", hint: "White background, max 200KB", required: true },
-  { key: "olevel", name: "O'Level Result (WAEC/NECO/NABTEB)", hint: "Clear statement of result or certificate", required: true },
+  { key: "olevel1", name: "O'Level Result (1st Sitting)", hint: "Clear statement of result or certificate (WAEC/NECO/NABTEB)", required: true },
+  { key: "olevel2", name: "O'Level Result (2nd Sitting)", hint: "Optional. Upload if combining two results", required: false },
   { key: "jamb", name: "JAMB Result Slip", hint: "Original JAMB result with passport photo", required: true },
-  { key: "birthCert", name: "Birth Certificate / Declaration", hint: "Official birth certificate or court declaration", required: true },
-  { key: "nin", name: "NIN Slip", hint: "National Identification Number slip", required: true },
-  { key: "other", name: "Other Required Documents", hint: "Any other supporting documents", required: false },
 ];
 
 // Initial mock uploaded files
 const initialUploads = {
   passport: { name: "passport-photo.jpg", previewUrl: null },
-  olevel: { name: "waec-result.pdf", previewUrl: null },
+  olevel1: { name: "waec-result.pdf", previewUrl: null },
   jamb: { name: "jamb-result-slip.pdf", previewUrl: null },
 };
 

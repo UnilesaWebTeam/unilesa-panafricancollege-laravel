@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bursary / Finance | Pan African College of Education</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+          colors: {
+            primary: { DEFAULT: '#0ea5e9', foreground: '#ffffff' },
+            foreground: '#0f172a',
+            success: '#16a34a',
+            destructive: '#dc2626',
+            warning: '#f59e0b',
+            brand: '#0ea5e9',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body class="bg-slate-50 antialiased text-foreground">
+
+  <div class="min-h-screen bg-background">
+    <div class="mx-auto flex max-w-[90rem] gap-6 px-4 py-6 lg:px-8">
+      
+      <!-- Desktop Sidebar -->
+      <aside class="ui-glass edge sticky top-6 hidden h-[calc(100vh-3rem)] w-64 shrink-0 flex-col rounded-3xl p-4 lg:flex">
+        <a href="#" class="mb-5 flex flex-col items-start gap-3 px-2">
+          <img src="../images/partnership-banner.png" alt="Partnership Banner" class="h-12 shrink-0 w-auto object-contain" />
+          <span class="text-sm font-bold leading-tight">
+            Admin Portal
+            <span class="block text-xs font-semibold text-success">Bursary / Finance</span>
+          </span>
+        </a>
+        
+        <div class="flex-1 overflow-y-auto">
+          <nav id="finance-nav" class="space-y-1">
+            <!-- Populated by JS -->
+          </nav>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <div class="min-w-0 flex-1">
+        
+        <!-- Topbar -->
+        <header class="ui-glass edge-sm mb-6 flex items-center justify-between gap-3 rounded-2xl p-4">
+          <div class="flex min-w-0 items-center gap-3">
+            <button id="mobile-menu-btn" class="rounded-xl border border-white/60 bg-white/60 px-3 py-2 text-sm lg:hidden">☰</button>
+            <div class="min-w-0">
+              <p id="topbar-title" class="truncate text-base font-bold tracking-tight sm:text-lg font-display">
+                Dashboard Overview
+              </p>
+              <p class="truncate text-xs text-foreground/50">
+                Manage Revenue & Transactions
+              </p>
+            </div>
+          </div>
+          
+          <div class="flex shrink-0 items-center gap-2">
+            <button class="relative rounded-xl border border-white/60 bg-white/60 px-3 py-2 text-sm transition hover:text-primary">
+              ◎ <span class="absolute -right-1 -top-1 grid h-4 w-4 place-items-center rounded-full bg-success text-[10px] font-bold text-white">4</span>
+            </button>
+            <button class="flex items-center gap-2 rounded-xl border border-white/60 bg-white/60 py-1.5 pl-1.5 pr-3 text-sm font-semibold transition hover:text-primary">
+              <span class="grid h-7 w-7 place-items-center rounded-lg bg-success/20 text-success font-bold">B</span>
+              <span class="hidden sm:inline">Bursar</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Dynamic Page Content Slots -->
+        <main class="space-y-6 relative">
+          
+          <!-- TAB: DASHBOARD -->
+          <div id="tab-dashboard" class="tab-content active space-y-6">
+            <!-- Statistics Cards -->
+            <div class="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+              <div class="stat-card"><p class="stat-value text-foreground">1,500</p><p class="stat-label">Total Transactions</p></div>
+              <div class="stat-card"><p class="stat-value text-success">1,420</p><p class="stat-label">Successful</p></div>
+              <div class="stat-card"><p class="stat-value text-warning">50</p><p class="stat-label">Pending</p></div>
+              <div class="stat-card"><p class="stat-value text-destructive">30</p><p class="stat-label">Failed</p></div>
+              <div class="stat-card"><p class="stat-value text-primary">₦5.5M</p><p class="stat-label">App Fee Revenue</p></div>
+              <div class="stat-card"><p class="stat-value text-primary">₦35M</p><p class="stat-label">Acceptance Revenue</p></div>
+            </div>
+            
+            <!-- Quick links/graphs placeholder -->
+            <div class="ui-card elevated">
+              <h2 class="text-xl font-bold font-display mb-4">Recent Payment Activity</h2>
+              <p class="text-sm text-foreground/70">Switch to the Transactions tab for a full interactive ledger.</p>
+            </div>
+          </div>
+
+          <!-- TAB: TRANSACTIONS -->
+          <div id="tab-transactions" class="tab-content space-y-6">
+            <div class="ui-card elevated">
+              <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <h2 class="text-xl font-bold font-display">Transaction Ledger</h2>
+              </div>
+              
+              <!-- Filters -->
+              <div class="mb-6 grid gap-4 sm:grid-cols-5 bg-white/40 p-4 rounded-xl border border-white/60">
+                <input type="text" placeholder="Search JAMB Reg, Name, Ref..." class="filter-input sm:col-span-2" />
+                <input type="date" class="filter-input" title="Date filter" />
+                <select class="filter-input">
+                  <option value="">All Statuses</option>
+                  <option value="success">Successful</option>
+                  <option value="pending">Pending</option>
+                  <option value="failed">Failed</option>
+                </select>
+                <select class="filter-input">
+                  <option value="">All Types</option>
+                  <option value="app">Post-UTME Application Fee</option>
+                  <option value="acceptance">Acceptance Fee</option>
+                </select>
+              </div>
+
+              <!-- Table -->
+              <div class="overflow-x-auto rounded-xl border border-white/60">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Candidate Name</th>
+                      <th>JAMB Reg</th>
+                      <th>Payment Type</th>
+                      <th>Amount</th>
+                      <th>Reference</th>
+                      <th>Date</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="transactions-tbody">
+                    <!-- Populated by JS -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination -->
+              <div class="mt-4 flex items-center justify-between border-t border-dashed border-foreground/10 pt-4">
+                <p class="text-xs text-foreground/50">Showing 1 to 5 of 1,500 entries</p>
+                <div class="flex gap-2">
+                  <button class="ui-button transition-all duration-200 ui-button-glass" disabled>Previous</button>
+                  <button class="ui-button transition-all duration-200 ui-button-glass">Next</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </main>
+      </div>
+    </div>
+
+    <!-- Payment Details Modal -->
+    <div id="payment-modal" class="hidden fixed inset-0 z-[60] place-items-center bg-foreground/40 p-4 backdrop-blur-sm" aria-modal="true" role="dialog">
+      <div class="ui-glass edge w-full max-w-lg rounded-3xl p-6 relative bg-white">
+        <div class="flex items-center justify-between mb-4 border-b border-foreground/10 pb-4">
+          <h3 class="text-xl font-bold tracking-tight font-display">Payment Receipt</h3>
+          <button id="close-payment-modal" class="text-foreground/50 hover:text-foreground p-1 font-bold text-xl">✕</button>
+        </div>
+        
+        <div id="modal-content" class="space-y-6">
+          <div class="text-center">
+            <span id="modal-status-icon" class="inline-block text-4xl mb-2 text-success">✓</span>
+            <p id="modal-status-text" class="text-sm font-bold uppercase tracking-wider text-success">Payment Successful</p>
+            <p id="modal-amount" class="text-3xl font-bold text-foreground mt-2">₦5,000</p>
+          </div>
+          
+          <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-foreground/5">
+            <div class="flex justify-between">
+              <span class="text-sm font-semibold text-foreground/60">Candidate Name</span>
+              <span id="modal-name" class="text-sm font-bold text-foreground">John Doe</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm font-semibold text-foreground/60">JAMB Reg Number</span>
+              <span id="modal-jamb" class="text-sm font-bold text-foreground font-mono">2026112233AA</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm font-semibold text-foreground/60">Payment Type</span>
+              <span id="modal-type" class="text-sm font-bold text-foreground">Application Fee</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm font-semibold text-foreground/60">Reference</span>
+              <span id="modal-ref" class="text-sm font-bold text-foreground font-mono">POSTUTME-2026-001245</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm font-semibold text-foreground/60">Date</span>
+              <span id="modal-date" class="text-sm font-bold text-foreground">12 Sep 2026</span>
+            </div>
+          </div>
+          
+          <div class="flex justify-center mt-6">
+            <button id="btn-print-receipt" class="ui-button transition-all duration-200 ui-button-primary w-full max-w-xs">
+              Print Receipt
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>

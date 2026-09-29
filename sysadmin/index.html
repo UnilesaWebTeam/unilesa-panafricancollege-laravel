@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Administrator | Pan African College of Education</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+          colors: {
+            primary: { DEFAULT: '#0ea5e9', foreground: '#ffffff' },
+            foreground: '#0f172a',
+            success: '#16a34a',
+            destructive: '#dc2626',
+            warning: '#f59e0b',
+            brand: '#0ea5e9',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body class="bg-slate-50 antialiased text-foreground">
+
+  <div class="min-h-screen bg-background">
+    <div class="mx-auto flex max-w-[90rem] gap-6 px-4 py-6 lg:px-8">
+      
+      <!-- Desktop Sidebar -->
+      <aside class="ui-glass edge sticky top-6 hidden h-[calc(100vh-3rem)] w-64 shrink-0 flex-col rounded-3xl p-4 lg:flex">
+        <a href="#" class="mb-5 flex flex-col items-start gap-3 px-2">
+          <img src="../images/partnership-banner.png" alt="Partnership Banner" class="h-12 shrink-0 w-auto object-contain" />
+          <span class="text-sm font-bold leading-tight">
+            Admin Portal
+            <span class="block text-xs font-semibold text-destructive">HOD / System Admin</span>
+          </span>
+        </a>
+        
+        <div class="flex-1 overflow-y-auto">
+          <nav id="sysadmin-nav" class="space-y-1">
+            <!-- Populated by JS -->
+          </nav>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <div class="min-w-0 flex-1">
+        
+        <!-- Topbar -->
+        <header class="ui-glass edge-sm mb-6 flex items-center justify-between gap-3 rounded-2xl p-4">
+          <div class="flex min-w-0 items-center gap-3">
+            <button id="mobile-menu-btn" class="rounded-xl border border-white/60 bg-white/60 px-3 py-2 text-sm lg:hidden">☰</button>
+            <div class="min-w-0">
+              <p id="topbar-title" class="truncate text-base font-bold tracking-tight sm:text-lg font-display">
+                Dashboard Overview
+              </p>
+              <p class="truncate text-xs text-foreground/50">
+                System Administration & Reporting
+              </p>
+            </div>
+          </div>
+          
+          <div class="flex shrink-0 items-center gap-2">
+            <button class="relative rounded-xl border border-white/60 bg-white/60 px-3 py-2 text-sm transition hover:text-primary">
+              ◎ <span class="absolute -right-1 -top-1 grid h-4 w-4 place-items-center rounded-full bg-destructive text-[10px] font-bold text-white">2</span>
+            </button>
+            <button class="flex items-center gap-2 rounded-xl border border-white/60 bg-white/60 py-1.5 pl-1.5 pr-3 text-sm font-semibold transition hover:text-primary">
+              <span class="grid h-7 w-7 place-items-center rounded-lg bg-destructive/20 text-destructive font-bold">SA</span>
+              <span class="hidden sm:inline">SuperAdmin</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Dynamic Page Content Slots -->
+        <main class="space-y-6 relative">
+          
+          <!-- TAB: DASHBOARD -->
+          <div id="tab-dashboard" class="tab-content active space-y-6">
+            <!-- Statistics Cards -->
+            <div class="grid gap-4 grid-cols-2 md:grid-cols-4 lg:grid-cols-7">
+              <div class="stat-card"><p class="stat-value text-primary">1,245</p><p class="stat-label">Total Candidates</p></div>
+              <div class="stat-card"><p class="stat-value text-foreground">1,100</p><p class="stat-label">Total Applications</p></div>
+              <div class="stat-card"><p class="stat-value text-primary">850</p><p class="stat-label">Eligible Candidates</p></div>
+              <div class="stat-card"><p class="stat-value text-warning">208</p><p class="stat-label">Submitted</p></div>
+              <div class="stat-card"><p class="stat-value text-success">₦5.5M</p><p class="stat-label">Total Payments</p></div>
+              <div class="stat-card"><p class="stat-value text-primary">420</p><p class="stat-label">Admission Offers</p></div>
+              <div class="stat-card"><p class="stat-value text-success">350</p><p class="stat-label">Accepted</p></div>
+            </div>
+
+            <!-- Charts -->
+            <div class="grid gap-6 lg:grid-cols-2">
+              <div class="ui-card elevated">
+                <h3 class="text-lg font-bold font-display">Applications by Programme</h3>
+                <div id="chart-programmes" class="chart-container"></div>
+                <div id="chart-programmes-labels" class="flex justify-between mt-2"></div>
+              </div>
+              <div class="ui-card elevated">
+                <h3 class="text-lg font-bold font-display">Applications by Status</h3>
+                <div id="chart-status" class="chart-container"></div>
+                <div id="chart-status-labels" class="flex justify-between mt-2"></div>
+              </div>
+              <div class="ui-card elevated">
+                <h3 class="text-lg font-bold font-display">Payment Statistics (₦)</h3>
+                <div id="chart-payments" class="chart-container"></div>
+                <div id="chart-payments-labels" class="flex justify-between mt-2"></div>
+              </div>
+              <div class="ui-card elevated">
+                <h3 class="text-lg font-bold font-display">Candidate Registration Trends</h3>
+                <div id="chart-trends" class="chart-container"></div>
+                <div id="chart-trends-labels" class="flex justify-between mt-2"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: USERS -->
+          <div id="tab-users" class="tab-content space-y-6">
+            <div class="ui-card elevated">
+              <div class="mb-4 flex items-center justify-between">
+                <h2 class="text-xl font-bold font-display">System Users</h2>
+                <button id="btn-add-user" class="ui-button transition-all duration-200 ui-button-primary">+ Add User</button>
+              </div>
+              <div class="overflow-x-auto rounded-xl border border-white/60">
+                <table class="data-table">
+                  <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
+                  <tbody id="users-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: PROGRAMMES -->
+          <div id="tab-programmes" class="tab-content space-y-6">
+            <div class="ui-card elevated">
+              <div class="mb-4 flex items-center justify-between">
+                <h2 class="text-xl font-bold font-display">Academic Programmes</h2>
+                <button id="btn-add-programme" class="ui-button transition-all duration-200 ui-button-primary">+ Add Programme</button>
+              </div>
+              <div class="overflow-x-auto rounded-xl border border-white/60">
+                <table class="data-table">
+                  <thead><tr><th>Programme Name</th><th>Department</th><th>Faculty</th><th>Min JAMB</th><th>Applicants</th><th>Status</th><th>Actions</th></tr></thead>
+                  <tbody id="programmes-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: ANNOUNCEMENTS -->
+          <div id="tab-announcements" class="tab-content space-y-6">
+            <div class="ui-card elevated">
+              <div class="mb-4 flex items-center justify-between">
+                <h2 class="text-xl font-bold font-display">Manage Announcements</h2>
+                <button id="btn-add-announcement" class="ui-button transition-all duration-200 ui-button-primary">+ Add Announcement</button>
+              </div>
+              <div class="overflow-x-auto rounded-xl border border-white/60">
+                <table class="data-table">
+                  <thead><tr><th>Title</th><th>Description</th><th>Date</th><th>Expiry Date</th><th>Status</th><th>Actions</th></tr></thead>
+                  <tbody id="announcements-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: REPORTS -->
+          <div id="tab-reports" class="tab-content space-y-6">
+            <div class="ui-card elevated">
+              <div class="mb-6 flex items-center justify-between">
+                <h2 class="text-xl font-bold font-display">Generate Reports</h2>
+                <div class="flex gap-2">
+                  <button class="ui-button transition-all duration-200 ui-button-primary" onclick="alert('Simulated: Report Generated')">Generate Report</button>
+                  <button class="ui-button transition-all duration-200 ui-button-glass" onclick="window.print()">Print</button>
+                  <button class="ui-button transition-all duration-200 ui-button-glass" onclick="alert('Simulated: Exporting report as CSV/PDF...')">Export</button>
+                </div>
+              </div>
+              
+              <div class="grid gap-6 md:grid-cols-3">
+                <!-- Application Reports -->
+                <div class="bg-white/40 p-4 rounded-xl border border-white/60">
+                  <h3 class="font-bold text-lg mb-3">Application Reports</h3>
+                  <ul class="space-y-2 text-sm text-foreground/80">
+                    <li class="flex justify-between"><span>Total applications:</span> <span class="font-bold">1,100</span></li>
+                    <li class="flex justify-between"><span>Apps by programme:</span> <span class="text-primary font-bold cursor-pointer">View Breakdown</span></li>
+                    <li class="flex justify-between"><span>Apps by status:</span> <span class="text-primary font-bold cursor-pointer">View Breakdown</span></li>
+                    <li class="flex justify-between"><span>Apps by date:</span> <span class="text-primary font-bold cursor-pointer">View Trend</span></li>
+                  </ul>
+                </div>
+
+                <!-- Payment Reports -->
+                <div class="bg-white/40 p-4 rounded-xl border border-white/60">
+                  <h3 class="font-bold text-lg mb-3">Payment Reports</h3>
+                  <ul class="space-y-2 text-sm text-foreground/80">
+                    <li class="flex justify-between"><span>Total app payments:</span> <span class="font-bold">₦5.5M</span></li>
+                    <li class="flex justify-between"><span>Total acc payments:</span> <span class="font-bold">₦35M</span></li>
+                    <li class="flex justify-between"><span>Successful payments:</span> <span class="font-bold text-success">1,420</span></li>
+                    <li class="flex justify-between"><span>Failed payments:</span> <span class="font-bold text-destructive">30</span></li>
+                    <li class="flex justify-between"><span>Pending payments:</span> <span class="font-bold text-warning">50</span></li>
+                  </ul>
+                </div>
+
+                <!-- Admission Reports -->
+                <div class="bg-white/40 p-4 rounded-xl border border-white/60">
+                  <h3 class="font-bold text-lg mb-3">Admission Reports</h3>
+                  <ul class="space-y-2 text-sm text-foreground/80">
+                    <li class="flex justify-between"><span>Admission offers:</span> <span class="font-bold text-primary">420</span></li>
+                    <li class="flex justify-between"><span>Accepted candidates:</span> <span class="font-bold text-success">350</span></li>
+                    <li class="flex justify-between"><span>Not offered admission:</span> <span class="font-bold text-foreground/50">825</span></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: SETTINGS -->
+          <div id="tab-settings" class="tab-content space-y-6">
+            <div class="ui-card elevated max-w-2xl">
+              <h2 class="text-xl font-bold font-display mb-6">Portal Configuration</h2>
+              <form id="settings-form" class="space-y-4">
+                <div class="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label class="block text-sm font-semibold text-foreground/70 mb-1">Application Fee (₦)</label>
+                    <input type="number" value="5000" class="w-full rounded-xl border border-white/60 bg-white/50 px-4 py-2" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-semibold text-foreground/70 mb-1">Acceptance Fee (₦)</label>
+                    <input type="number" value="100000" class="w-full rounded-xl border border-white/60 bg-white/50 px-4 py-2" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-semibold text-foreground/70 mb-1">Default Minimum JAMB Score</label>
+                    <input type="number" value="140" class="w-full rounded-xl border border-white/60 bg-white/50 px-4 py-2" />
+                  </div>
+                  <div class="col-span-2 grid gap-4 sm:grid-cols-2 mt-2">
+                    <div>
+                      <label class="block text-sm font-semibold text-foreground/70 mb-1">Application Opening Date</label>
+                      <input type="date" value="2026-07-01" class="w-full rounded-xl border border-white/60 bg-white/50 px-4 py-2" />
+                    </div>
+                    <div>
+                      <label class="block text-sm font-semibold text-foreground/70 mb-1">Application Closing Date</label>
+                      <input type="date" value="2026-10-31" class="w-full rounded-xl border border-white/60 bg-white/50 px-4 py-2" />
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-6 border-t border-dashed border-foreground/20 pt-4 flex justify-end">
+                  <button type="button" id="btn-save-settings" class="ui-button transition-all duration-200 ui-button-primary">Save Settings</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </main>
+      </div>
+    </div>
+
+    <!-- Reusable Modal Base -->
+    <div id="global-modal" class="hidden fixed inset-0 z-[60] place-items-center bg-foreground/40 p-4 backdrop-blur-sm" aria-modal="true" role="dialog">
+      <div class="ui-glass edge w-full max-w-md rounded-3xl p-6 relative">
+        <div class="flex items-center justify-between mb-4">
+          <h3 id="modal-title" class="text-lg font-bold tracking-tight font-display">Modal</h3>
+          <button id="modal-close" class="text-foreground/50 hover:text-foreground p-1">✕</button>
+        </div>
+        <div id="modal-content"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>
