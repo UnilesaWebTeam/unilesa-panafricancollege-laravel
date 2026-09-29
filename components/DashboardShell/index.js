@@ -59,7 +59,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // --- RENDER NAVIGATION ---
-  const activeTab = window.DASHBOARD_ACTIVE_TAB || "";
+  const currentPath = window.location.pathname;
+  let activeTab = window.DASHBOARD_ACTIVE_TAB || "";
+  
+  if (!activeTab) {
+    if (currentPath.includes('dashboard')) activeTab = "Dashboard";
+    else if (currentPath.includes('application')) activeTab = "My Application";
+    else if (currentPath.includes('document')) activeTab = "Documents";
+    else if (currentPath.includes('payment')) activeTab = "Payment";
+    else if (currentPath.includes('screening-slip')) activeTab = "Screening Slip";
+    else if (currentPath.includes('admission')) activeTab = "Admission Status";
+    else if (currentPath.includes('acceptance-fee')) activeTab = "Admission Status";
+    else if (currentPath.includes('review')) activeTab = "My Application";
+    else if (currentPath.includes('submission')) activeTab = "My Application";
+  }
 
   const renderNav = (container, isMobile) => {
     container.innerHTML = navItems.map(item => {
