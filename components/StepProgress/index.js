@@ -13,21 +13,32 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   const stepRoute = {
-    verification: "/verify",
-    eligibility: "/eligibility",
-    payment: "/payment",
-    application: "/application",
-    documents: "/documents",
-    review: "/review",
-    submission: "/review",
+    verification: "../verify/index.html",
+    eligibility: "../eligibility/index.html",
+    payment: "../payment/index.html",
+    application: "../application/index.html",
+    documents: "../document/index.html",
+    review: "../review/index.html",
+    submission: "../submission/index.html",
   };
 
   // --- DOM ELEMENTS ---
   const stepListContainer = document.getElementById('step-progress-list');
 
   // --- RENDER LOGIC ---
-  // Read the current step from global config, default to verification
-  const currentStepKey = window.CURRENT_STEP || "verification";
+  // Determine current step from URL path
+  const currentPath = window.location.pathname;
+  let currentStepKey = "verification";
+  if (currentPath.includes('eligibility')) currentStepKey = "eligibility";
+  else if (currentPath.includes('payment')) currentStepKey = "payment";
+  else if (currentPath.includes('application')) currentStepKey = "application";
+  else if (currentPath.includes('document')) currentStepKey = "documents";
+  else if (currentPath.includes('review')) currentStepKey = "review";
+  else if (currentPath.includes('submission') || currentPath.includes('screening-slip')) currentStepKey = "submission";
+
+  // Fallback to window.CURRENT_STEP if provided manually
+  if (window.CURRENT_STEP) currentStepKey = window.CURRENT_STEP;
+
   const currentIndex = applicationSteps.findIndex(s => s.key === currentStepKey);
 
   const html = applicationSteps.map((step, i) => {
