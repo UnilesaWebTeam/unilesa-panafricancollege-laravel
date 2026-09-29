@@ -1,0 +1,113 @@
+<!-- payment-status/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Status | Pan African College of Education</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            primary: { DEFAULT: '#0ea5e9', foreground: '#ffffff' },
+            foreground: '#0f172a',
+            success: '#16a34a',
+            brand: '#0ea5e9',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    .ui-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.75rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .ui-button-primary {
+      background-color: #0ea5e9;
+      color: white;
+      box-shadow: 0 4px 14px 0 rgba(14, 165, 233, 0.39);
+    }
+    .ui-button-primary:hover {
+      background-color: #0284c7;
+    }
+    .frost {
+      background-color: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+    }
+    /* Hide scrollbar for step progress */
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 antialiased text-foreground flex flex-col min-h-screen">
+  
+  <div class="mx-auto w-full max-w-4xl px-4 py-8">
+    <!-- Progress Bar -->
+    <div id="step-progress-container" class="mb-12">
+      <ol id="step-progress-list" class="flex flex-wrap items-center justify-center gap-y-2 gap-x-1 sm:flex-nowrap sm:overflow-x-auto pb-2 scrollbar-hide"></ol>
+    </div>
+
+    <!-- Success Content -->
+    <div class="mx-auto max-w-xl text-center">
+      <div class="frost rounded-3xl p-10 flex flex-col items-center">
+        <div class="h-20 w-20 rounded-full bg-success/20 flex items-center justify-center mb-6">
+          <div class="h-12 w-12 rounded-full bg-success text-white flex items-center justify-center text-2xl font-bold">✓</div>
+        </div>
+        
+        <h1 class="text-3xl font-display font-bold text-foreground mb-2">Payment Successful!</h1>
+        <p class="text-foreground/70 mb-8">Your Post-UTME application fee has been received.</p>
+        
+        <div class="w-full bg-white/50 rounded-2xl p-6 text-left mb-8 border border-white">
+          <div class="flex justify-between py-2 border-b border-foreground/10">
+            <span class="text-sm font-medium text-foreground/60">Amount Paid</span>
+            <span class="text-sm font-bold text-foreground">₦5,000</span>
+          </div>
+          <div class="flex justify-between py-2 border-b border-foreground/10">
+            <span class="text-sm font-medium text-foreground/60">Transaction Reference</span>
+            <span id="display-ref" class="text-sm font-bold text-foreground">Loading...</span>
+          </div>
+          <div class="flex justify-between py-2">
+            <span class="text-sm font-medium text-foreground/60">Date</span>
+            <span id="display-date" class="text-sm font-bold text-foreground">Loading...</span>
+          </div>
+        </div>
+
+        <p class="text-sm text-foreground/60 mb-6">You can download your receipt later from the Payment page.</p>
+        
+        <a href="../application/index.html" class="ui-button ui-button-primary w-full py-4 text-base">Continue Application &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../components/StepProgress/index.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

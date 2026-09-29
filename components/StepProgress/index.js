@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { key: "verification", label: "Verification" },
     { key: "eligibility", label: "Eligibility" },
     { key: "payment", label: "Payment" },
+    { key: "payment_status", label: "Payment Status" },
     { key: "application", label: "Application" },
     { key: "documents", label: "Documents" },
     { key: "review", label: "Review" },
@@ -16,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     verification: "../verify/index.html",
     eligibility: "../eligibility/index.html",
     payment: "../payment/index.html",
+    payment_status: "../payment-status/index.html",
     application: "../application/index.html",
     documents: "../document/index.html",
     review: "../review/index.html",
@@ -30,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const currentPath = window.location.pathname;
   let currentStepKey = "verification";
   if (currentPath.includes('eligibility')) currentStepKey = "eligibility";
+  else if (currentPath.includes('payment-status')) currentStepKey = "payment_status";
   else if (currentPath.includes('payment')) currentStepKey = "payment";
   else if (currentPath.includes('application')) currentStepKey = "application";
   else if (currentPath.includes('document')) currentStepKey = "documents";

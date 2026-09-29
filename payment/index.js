@@ -137,11 +137,12 @@ document.addEventListener('DOMContentLoaded', () => {
         status = "failed";
         demoFailed = false;
         demoCheckbox.checked = false; // reset UI checkbox
+        updateUI();
       } else {
         reference = genReference();
         status = "successful";
+        window.location.href = "../payment-status/index.html";
       }
-      updateUI();
     }, 1500);
   });
 
