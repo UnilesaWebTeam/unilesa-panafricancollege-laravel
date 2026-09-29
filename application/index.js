@@ -4,14 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const steps = [
     { title: "Personal Information", id: "step-section-0" },
-    { title: "Academic Information", id: "step-section-1" },
-    { title: "Next of Kin", id: "step-section-2" },
-    { title: "Birth Information", id: "step-section-3" }
+    { title: "Academic Information", id: "step-section-1" }
   ];
 
   let currentStep = 0;
 
-  const btnNext = document.getElementById('btn-next');
   const btnPrev = document.getElementById('btn-previous');
   const btnSave = document.getElementById('btn-save');
   const stepTitle = document.getElementById('step-title');
@@ -21,16 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const savedContainer = document.getElementById('saved-container');
   const savedText = document.getElementById('saved-text');
   
-  // File upload simulation
-  const btnAttachDoc = document.getElementById('btn-attach-doc');
-  const birthCertFilename = document.getElementById('birth-cert-filename');
-
-  if (btnAttachDoc) {
-    btnAttachDoc.addEventListener('click', () => {
-      birthCertFilename.textContent = "birth_certificate_scan.pdf";
-      birthCertFilename.classList.add('text-foreground');
-    });
-  }
+  // File upload simulation (Removed since Birth Info is gone)
 
   const renderStep = () => {
     // Hide all steps
@@ -69,23 +57,11 @@ document.addEventListener('DOMContentLoaded', () => {
     btnPrev.disabled = currentStep === 0;
 
     if (currentStep === steps.length - 1) {
-      btnNext.textContent = "Proceed to Documents";
+      btnSave.textContent = "Save & Continue to Documents";
     } else {
-      btnNext.textContent = "Next";
+      btnSave.textContent = "Save & Continue";
     }
   };
-
-  btnNext.addEventListener('click', (e) => {
-    e.preventDefault(); // Prevent form submission
-    
-    if (currentStep < steps.length - 1) {
-      currentStep++;
-      renderStep();
-    } else {
-      // Final step -> navigate to documents
-      window.location.href = "../document/index.html";
-    }
-  });
 
   btnPrev.addEventListener('click', () => {
     if (currentStep > 0) {
@@ -94,12 +70,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  btnSave.addEventListener('click', () => {
+  btnSave.addEventListener('click', (e) => {
+    e.preventDefault(); // Prevent form submission
+    
+    // Show toast
     savedContainer.classList.remove('hidden');
     savedText.textContent = "Draft saved successfully.";
+    
     setTimeout(() => {
       savedContainer.classList.add('hidden');
-    }, 3000);
+    }, 2000);
+
+    // Advance step or navigate
+    if (currentStep < steps.length - 1) {
+      currentStep++;
+      renderStep();
+    } else {
+      // Final step -> navigate to documents
+      setTimeout(() => {
+        window.location.href = "../document/index.html";
+      }, 500); // slight delay to see the save toast
+    }
   });
 
   // Pre-fill mock data

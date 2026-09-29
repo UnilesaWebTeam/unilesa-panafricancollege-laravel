@@ -173,7 +173,6 @@
           </div>
 
           <ol id="step-navigation" class="step-list">
-            <!-- Dynamically populated or rendered static initial structure -->
             <li>
               <button type="button" class="step-btn active" data-step="0">
                 <span class="step-num">1</span>
@@ -184,18 +183,6 @@
               <button type="button" class="step-btn" data-step="1">
                 <span class="step-num">2</span>
                 Academic Information
-              </button>
-            </li>
-            <li>
-              <button type="button" class="step-btn" data-step="2">
-                <span class="step-num">3</span>
-                Next of Kin
-              </button>
-            </li>
-            <li>
-              <button type="button" class="step-btn" data-step="3">
-                <span class="step-num">4</span>
-                Birth Information
               </button>
             </li>
           </ol>
@@ -272,6 +259,41 @@
                 <textarea id="address" rows="3" class="input-field"></textarea>
                 <p id="error-address" class="error-text hidden"></p>
               </div>
+              <div class="col-span-2 mt-6">
+                <h3 class="text-lg font-bold text-foreground">Next of Kin Details</h3>
+                <hr class="mt-2 border-foreground/10">
+              </div>
+
+              <div class="field-group">
+                <label for="kinName" class="field-label">Full Name</label>
+                <input type="text" id="kinName" class="input-field" value="">
+                <p id="error-kinName" class="error-text hidden"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="kinRelationship" class="field-label">Relationship</label>
+                <select id="kinRelationship" class="select-field">
+                  <option value="">Select relationship</option>
+                  <option value="Father">Father</option>
+                  <option value="Mother">Mother</option>
+                  <option value="Guardian">Guardian</option>
+                  <option value="Sibling">Sibling</option>
+                  <option value="Spouse">Spouse</option>
+                </select>
+                <p id="error-kinRelationship" class="error-text hidden"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="kinPhone" class="field-label">Phone Number</label>
+                <input type="tel" id="kinPhone" class="input-field" value="">
+                <p id="error-kinPhone" class="error-text hidden"></p>
+              </div>
+
+              <div class="field-group col-span-2">
+                <label for="kinAddress" class="field-label">Address</label>
+                <textarea id="kinAddress" rows="3" class="input-field"></textarea>
+                <p id="error-kinAddress" class="error-text hidden"></p>
+              </div>
             </div>
 
             <!-- STEP 1: Academic Information (Read-only) -->
@@ -325,94 +347,13 @@
               </div>
             </div>
 
-            <!-- STEP 2: Next of Kin -->
-            <div id="step-section-2" class="step-section grid grid-2 hidden">
-              <div class="field-group">
-                <label for="kinName" class="field-label">Full Name</label>
-                <input type="text" id="kinName" class="input-field" value="">
-                <p id="error-kinName" class="error-text hidden"></p>
-              </div>
-
-              <div class="field-group">
-                <label for="kinRelationship" class="field-label">Relationship</label>
-                <select id="kinRelationship" class="select-field">
-                  <option value="">Select relationship</option>
-                  <option value="Father">Father</option>
-                  <option value="Mother">Mother</option>
-                  <option value="Guardian">Guardian</option>
-                  <option value="Sibling">Sibling</option>
-                  <option value="Spouse">Spouse</option>
-                </select>
-                <p id="error-kinRelationship" class="error-text hidden"></p>
-              </div>
-
-              <div class="field-group">
-                <label for="kinPhone" class="field-label">Phone Number</label>
-                <input type="tel" id="kinPhone" class="input-field" value="">
-                <p id="error-kinPhone" class="error-text hidden"></p>
-              </div>
-
-              <div class="field-group col-span-2">
-                <label for="kinAddress" class="field-label">Address</label>
-                <textarea id="kinAddress" rows="3" class="input-field"></textarea>
-                <p id="error-kinAddress" class="error-text hidden"></p>
-              </div>
-            </div>
-
-            <!-- STEP 3: Birth Information -->
-            <div id="step-section-3" class="step-section grid grid-2 hidden">
-              <div class="field-group">
-                <label for="placeOfBirth" class="field-label">Place of Birth</label>
-                <input type="text" id="placeOfBirth" class="input-field" value="">
-                <p id="error-placeOfBirth" class="error-text hidden"></p>
-              </div>
-
-              <div class="field-group">
-                <label for="nationality" class="field-label">Nationality</label>
-                <input type="text" id="nationality" class="input-field" value="">
-                <p id="error-nationality" class="error-text hidden"></p>
-              </div>
-
-              <div class="field-group">
-                <label for="religion" class="field-label">Religion</label>
-                <input type="text" id="religion" class="input-field" value="">
-              </div>
-
-              <div class="field-group">
-                <label for="maritalStatus" class="field-label">Marital Status</label>
-                <select id="maritalStatus" class="select-field">
-                  <option value="">Select status</option>
-                  <option value="Single">Single</option>
-                  <option value="Married">Married</option>
-                </select>
-                <p id="error-maritalStatus" class="error-text hidden"></p>
-              </div>
-
-              <div class="field-group col-span-2">
-                <span class="field-label">Birth Certificate / Age Declaration</span>
-                <div class="upload-box">
-                  <span id="birth-cert-filename" class="upload-text">
-                    No file attached (PDF or JPG, max 2MB)
-                  </span>
-                  <button type="button" id="btn-attach-doc" class="btn transition-all duration-200 btn-glass px-4 py-2">
-                    Attach document
-                  </button>
-                </div>
-                <p id="error-birthCertificate" class="error-text hidden"></p>
-              </div>
-            </div>
-
             <!-- Actions Bar -->
             <div class="form-actions">
               <button type="button" id="btn-previous" class="btn transition-all duration-200 btn-glass" disabled>
                 Previous
               </button>
-              <button type="button" id="btn-save" class="btn transition-all duration-200 btn-ink">
+              <button type="button" id="btn-save" class="btn transition-all duration-200 btn-primary">
                 Save &amp; Continue
-              </button>
-
-              <button type="submit" id="btn-next" class="btn transition-all duration-200 btn-primary">
-                Next
               </button>
 
               <a href="../dashboard/index.html" id="btn-dashboard" class="btn transition-all duration-200 btn-primary hidden">
