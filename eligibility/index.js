@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     alertEligible.classList.remove('hidden');
     proceedBtn.classList.remove('disabled');
     proceedBtn.removeAttribute('aria-disabled');
-    proceedBtn.href = '/payment';
+    proceedBtn.href = '../payment/index.html';
   } else {
     badgeEl.textContent = 'Not Eligible';
     badgeEl.className = 'ui-badge ui-badge-neutral';
