@@ -1,49 +1,11 @@
-<!--
-  CONVERSION NOTES: documents.html
-
-  MISSING COMPONENTS (imported in the React file but not pasted):
-  - DashboardShell — Wraps the layout with navigation sidebar/topbar and active state "Documents". Replaced with placeholder container `<div id="dashboard-shell-root">`.
-  - Badge — Rendered as inline status indicators with tone-based styles (`brand`, `success`, `neutral`). Replaced with `.badge` CSS class with modifier classes (`.badge-brand`, `.badge-success`, `.badge-neutral`).
-  - Button — Action elements with visual variants (`primary`, `glass`, `ghost`, `destructive`). Replaced with standard HTML `<button>` elements styled via CSS `.btn` classes.
-  - Card — Container element with glassmorphism background and optional elevated shadow (`elevated`). Replaced with `.card` and `.card-elevated` classes.
-
-  MISSING DATA / CONSTANTS:
-  - `@/data/documents` (`requiredDocuments`) — Mock required documents dataset. Replaced with static JS array `requiredDocuments`.
-  - `@/lib/utils` (`cn`) — Utility for class concatenation. Replaced with direct template literals and DOM manipulation in JS.
-
-  SHARED PARTIALS NEEDED (navbar, footer, sidebar, layout):
-  - DashboardShell Layout (Sidebar & Topbar) — Belongs around the `#dashboard-shell-root` container.
-
-  HOOKS / CONTEXT / STATE / STORES USED:
-  - TanStack Router (`createFileRoute`) — Meta tags placed directly in HTML `<head>`.
-  - React `useState` (`uploads`, `notice`) & `useRef` (`inputRefs`) — Replaced with JS state object `state`, URL blob manager, and DOM event handlers.
-
-  ASSETS NEEDED (images, icons, fonts, SVGs):
-  - System font stack or custom web font (Inter/Sans-serif) — Managed via CSS variables.
-
-  THIRD-PARTY LIBRARIES:
-  - `@tanstack/react-router` — Replaced with HTML document metadata.
-
-  ASSUMPTIONS I MADE:
-  - Kept layout responsive using standard CSS grid and flexbox corresponding to Tailwind utility classes (`grid-cols-1`, `lg:grid-cols-2`).
-  - File upload preview uses `URL.createObjectURL` for image previews and revokes previous object URLs to prevent memory leaks.
-
-  TODO BEFORE THIS PAGE IS COMPLETE:
-  - Connect dynamic API endpoints to upload binary file data (e.g. multipart/form-data to server).
-  - Embed full DashboardShell navbar/sidebar layout wrapper once available.
--->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document Upload | Pan African College of Education</title>
-  <meta name="description" content="Upload your passport photograph, O'Level result, JAMB result, birth certificate, NIN slip and other required documents.">
-  <meta property="og:title" content="Document Upload | Pan African College of Education">
-  <meta property="og:description" content="Upload your passport photograph, O'Level result, JAMB result, birth certificate, NIN slip and other required documents.">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-    <!-- Fonts -->
+  <title>Admission Status | Pan African College of Education</title>
+  
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
@@ -72,8 +34,9 @@
       }
     }
   </script>
-  <link rel="stylesheet" href="index.css">
-<link rel="stylesheet" href="../components/Header/index.css" />
+  
+  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="../components/Header/index.css" />
   <link rel="stylesheet" href="../components/DashboardShell/index.css" />
 </head>
 <body class="bg-slate-50 antialiased text-foreground">
@@ -127,7 +90,6 @@
             <button
               type="button"
               id="notifs-btn"
-              aria-label="Notifications"
               class="relative rounded-xl border border-white/60 bg-white/60 px-3 py-2 text-sm transition hover:text-primary"
             >
               ◎
@@ -150,55 +112,101 @@
         <!-- Dynamic Page Content Injected Here -->
         <div id="dashboard-content-slot">
           
-
-    <main class="container">
+    <main class="mx-auto max-w-4xl px-2 py-4">
       <div class="space-y-6">
+        
+        <div class="ui-card elevated">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Admission</p>
+          <h1 class="mt-1 text-2xl font-bold tracking-tight sm:text-3xl font-display">Admission Status</h1>
+          <p class="mt-1 text-sm text-foreground/60">
+            Track the progress of your application and view admission offers.
+          </p>
+        </div>
 
-        <!-- Progress Overview Card -->
-        <section class="card card-elevated">
-          <div class="flex-header">
-            <div>
-              <p class="subtitle">Documents</p>
-              <h1 class="page-title">Document Upload</h1>
-              <p class="section-desc">
-                Upload clear scans of each required document. Files are simulated in this prototype.
-              </p>
+        <div class="grid gap-6 md:grid-cols-5">
+          <!-- Timeline Section -->
+          <div class="ui-card md:col-span-2">
+            <h2 class="text-lg font-bold tracking-tight font-display mb-6">Progress Timeline</h2>
+            
+            <div class="timeline-container">
+              <div class="timeline-item completed">
+                <div class="timeline-icon">✓</div>
+                <p class="text-sm font-bold">Application Submitted</p>
+                <p class="text-xs text-foreground/60">September 12, 2026</p>
+              </div>
+              <div class="timeline-item completed">
+                <div class="timeline-icon">✓</div>
+                <p class="text-sm font-bold">Application Under Review</p>
+                <p class="text-xs text-foreground/60">September 15, 2026</p>
+              </div>
+              <div class="timeline-item completed">
+                <div class="timeline-icon">✓</div>
+                <p class="text-sm font-bold">Screening Completed</p>
+                <p class="text-xs text-foreground/60">October 18, 2026</p>
+              </div>
+              <div class="timeline-item completed">
+                <div class="timeline-icon">✓</div>
+                <p class="text-sm font-bold">Admission Processing</p>
+                <p class="text-xs text-foreground/60">October 25, 2026</p>
+              </div>
+              <div class="timeline-item active">
+                <div class="timeline-icon">→</div>
+                <p class="text-sm font-bold text-primary">Admission Offered</p>
+                <p class="text-xs text-primary/70">Action Required</p>
+              </div>
             </div>
-            <span id="required-progress-badge" class="badge badge-brand">
-              0/0 required uploaded
-            </span>
           </div>
 
-          <div
-            id="progress-bar-container"
-            class="progress-bar-bg"
-            role="progressbar"
-            aria-valuenow="0"
-            aria-valuemin="0"
-            aria-valuemax="100"
-          >
-            <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%;"></div>
+          <!-- Admission Offer Section -->
+          <div class="ui-card md:col-span-3 border-primary/30 bg-primary/5">
+            <div class="mb-4 inline-flex items-center gap-2 rounded-full bg-success/20 px-3 py-1 text-sm font-bold text-success">
+              <span>🎉</span> Congratulations!
+            </div>
+            
+            <h2 class="text-xl font-bold tracking-tight font-display text-foreground">You have been offered admission.</h2>
+            <p class="mt-2 text-sm text-foreground/70">
+              We are pleased to offer you provisional admission into Pan African College of Education.
+            </p>
+
+            <div class="mt-6 rounded-xl border border-white/60 bg-white/60 p-4">
+              <div class="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <p class="text-xs font-semibold uppercase text-foreground/50">Candidate Name</p>
+                  <p id="offer-name" class="font-bold text-foreground mt-1">Jane Doe</p>
+                </div>
+                <div>
+                  <p class="text-xs font-semibold uppercase text-foreground/50">Programme</p>
+                  <p id="offer-programme" class="font-bold text-foreground mt-1">B.Sc. Computer Science</p>
+                </div>
+                <div>
+                  <p class="text-xs font-semibold uppercase text-foreground/50">Faculty</p>
+                  <p id="offer-faculty" class="font-bold text-foreground mt-1">Faculty of Science</p>
+                </div>
+                <div>
+                  <p class="text-xs font-semibold uppercase text-foreground/50">Department</p>
+                  <p id="offer-department" class="font-bold text-foreground mt-1">Computer Science</p>
+                </div>
+                <div class="sm:col-span-2">
+                  <p class="text-xs font-semibold uppercase text-foreground/50">Admission Status</p>
+                  <span class="inline-block mt-1 ui-badge ui-badge-success">Admission Offered</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+              <a href="../acceptance-fee/index.html" class="ui-button ui-button-primary">
+                Accept Admission (Pay Fee)
+              </a>
+              <button id="btn-view-letter" class="ui-button ui-button-glass">
+                View Admission Letter
+              </button>
+            </div>
           </div>
-        </section>
-
-        <!-- Notification Notice -->
-        <div id="notice-container" class="notice-box hidden" role="status">
-          <span id="notice-text"></span>
         </div>
-
-        <!-- Document Grid -->
-        <div id="documents-grid" class="grid grid-docs">
-          <!-- Rendered dynamically via documents.js -->
-        </div>
-
-        <p class="footer-note">
-          Prototype only — selected files stay in your browser and are never uploaded.
-        </p>
 
       </div>
     </main>
 
-  
         </div>
 
       </div>
@@ -206,20 +214,13 @@
 
     <!-- Mobile Menu Overlay -->
     <div id="mobile-overlay" class="hidden fixed inset-0 z-50 flex lg:hidden">
-      <!-- Backdrop -->
       <div id="mobile-backdrop" class="flex-1 bg-foreground/40 backdrop-blur-sm cursor-pointer"></div>
-      
-      <!-- Drawer -->
       <div class="ui-glass w-72 overflow-y-auto p-4 transform transition-transform translate-x-0">
         <div class="mb-4 flex items-center justify-between">
           <span class="text-sm font-bold">Menu</span>
-          <button id="mobile-close-btn" aria-label="Close menu" class="px-2 text-foreground/50 hover:text-foreground">
-            ✕
-          </button>
+          <button id="mobile-close-btn" class="px-2 text-foreground/50 hover:text-foreground">✕</button>
         </div>
-        <nav id="mobile-nav" class="space-y-1">
-          <!-- Populated by JS -->
-        </nav>
+        <nav id="mobile-nav" class="space-y-1"></nav>
       </div>
     </div>
 
@@ -230,16 +231,11 @@
           <h3 id="modal-title" class="text-lg font-bold tracking-tight font-display">Modal Title</h3>
           <button id="modal-close" class="text-foreground/50 hover:text-foreground p-1">✕</button>
         </div>
-        
-        <div id="modal-content">
-          <!-- Content injected dynamically -->
-        </div>
+        <div id="modal-content"></div>
       </div>
     </div>
 
   </div>
-
-  
 
   <script src="../components/Header/index.js"></script>
   <script src="../components/DashboardShell/index.js"></script>

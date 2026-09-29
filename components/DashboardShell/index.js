@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { label: "Documents", icon: "❐", to: "../document/index.html" },
     { label: "Payment", icon: "₦", to: "../payment/index.html" },
     { label: "Screening Slip", icon: "🖨", to: "../screening-slip/index.html" },
-    { label: "Admission Status", icon: "★" },
+    { label: "Admission Status", icon: "★", to: "../admission/index.html" },
     { label: "Notifications", icon: "◎" },
     { label: "Profile", icon: "☺" },
     { label: "Logout", icon: "⏻", to: "../landing-page/index.html" },
