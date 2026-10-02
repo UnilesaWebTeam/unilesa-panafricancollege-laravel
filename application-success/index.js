@@ -30,4 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (progEl) progEl.textContent = mockCandidate.programme;
   if (dateEl) dateEl.textContent = applicationRecord.submissionDate;
   if (statusEl) statusEl.textContent = applicationRecord.status;
+
+  // Print button handler
+  const printBtn = document.getElementById('btn-print');
+  if (printBtn) {
+    printBtn.addEventListener('click', () => {
+      window.print();
+    });
+  }
 });
