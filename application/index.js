@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnPrev.disabled = currentStep === 0;
 
     if (currentStep === steps.length - 1) {
-      btnSave.textContent = "Save & Continue to Documents";
+      btnSave.textContent = "Submit Application";
     } else {
       btnSave.textContent = "Save & Continue";
     }
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Show toast
     savedContainer.classList.remove('hidden');
-    savedText.textContent = "Draft saved successfully.";
+    savedText.textContent = currentStep === steps.length - 1 ? "Application submitted successfully." : "Draft saved successfully.";
     
     setTimeout(() => {
       savedContainer.classList.add('hidden');
@@ -86,9 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
       currentStep++;
       renderStep();
     } else {
-      // Final step -> navigate to documents
+      // Final step -> navigate to application successful page
       setTimeout(() => {
-        window.location.href = "../document/index.html";
+        window.location.href = "../application-success/index.html";
       }, 500); // slight delay to see the save toast
     }
   });
